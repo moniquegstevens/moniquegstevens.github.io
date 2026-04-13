@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mo Stevens — BrightEdge</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --be-navy: #0B1E3F; --be-blue: #0057B8; --be-bright: #0094FF;
+    --be-accent: #00C7FF; --be-white: #F8FAFF;
+    --font-display: 'Playfair Display', serif; --font-body: 'DM Sans', sans-serif;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--font-body); background: var(--be-navy); color: var(--be-white); overflow-x: hidden; }
+
+  .nav-dots { position: fixed; right: 28px; top: 50%; transform: translateY(-50%); z-index: 100; display: flex; flex-direction: column; gap: 12px; }
+  .nav-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.3); cursor: pointer; transition: all 0.3s; border: none; }
+  .nav-dot.active, .nav-dot:hover { background: var(--be-accent); transform: scale(1.5); }
+
+  .slide { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 60px 80px; position: relative; overflow: hidden; }
+
+  .slide-hero { background: var(--be-navy); background-image: radial-gradient(ellipse 80% 60% at 70% 40%, rgba(0,87,184,0.4) 0%, transparent 60%), radial-gradient(ellipse 40% 40% at 20% 80%, rgba(0,199,255,0.15) 0%, transparent 50%); }
+  .slide-hero::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(0,148,255,0.06) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; }
+
+  .hero-tag { display: inline-block; background: rgba(0,148,255,0.15); border: 1px solid rgba(0,148,255,0.4); color: var(--be-accent); font-size: 12px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; padding: 8px 18px; border-radius: 100px; margin-bottom: 32px; animation: fadeUp 0.8s ease both; }
+  .hero-name { font-family: var(--font-display); font-size: clamp(52px, 7vw, 96px); font-weight: 900; line-height: 1; margin-bottom: 16px; animation: fadeUp 0.8s 0.1s ease both; }
+  .hero-name span { background: linear-gradient(135deg, var(--be-bright), var(--be-accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .hero-title { font-size: clamp(18px, 2.5vw, 26px); font-weight: 300; color: rgba(248,250,255,0.7); margin-bottom: 48px; animation: fadeUp 0.8s 0.2s ease both; }
+  .hero-cta { display: flex; gap: 20px; flex-wrap: wrap; animation: fadeUp 0.8s 0.3s ease both; }
+  .btn-primary { background: linear-gradient(135deg, var(--be-blue), var(--be-bright)); color: white; padding: 14px 32px; border-radius: 8px; font-weight: 600; font-size: 15px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: transform 0.2s, box-shadow 0.2s; }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,148,255,0.4); }
+  .btn-ghost { border: 1px solid rgba(255,255,255,0.3); color: white; padding: 14px 32px; border-radius: 8px; font-weight: 500; font-size: 15px; text-decoration: none; transition: all 0.2s; }
+  .btn-ghost:hover { background: rgba(255,255,255,0.08); }
+  .hero-stats { position: absolute; right: 80px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 24px; animation: fadeLeft 0.8s 0.4s ease both; }
+  .stat-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 16px; padding: 24px 32px; text-align: center; min-width: 160px; }
+  .stat-number { font-family: var(--font-display); font-size: 42px; font-weight: 700; background: linear-gradient(135deg, var(--be-bright), var(--be-accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1; margin-bottom: 6px; }
+  .stat-label { font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1.5px; }
+
+  .slide-label { font-size: 11px; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: var(--be-accent); margin-bottom: 16px; opacity: 0; animation: fadeUp 0.6s ease forwards; }
+  .slide-heading { font-family: var(--font-display); font-size: clamp(36px, 5vw, 64px); font-weight: 700; line-height: 1.1; margin-bottom: 48px; opacity: 0; animation: fadeUp 0.6s 0.1s ease forwards; }
+  .divider { width: 60px; height: 3px; background: linear-gradient(90deg, var(--be-blue), var(--be-accent)); border-radius: 2px; margin-bottom: 32px; opacity: 0; animation: fadeUp 0.6s 0.05s ease forwards; }
+  .slide-num { position: absolute; bottom: 40px; left: 80px; font-size: 12px; color: rgba(255,255,255,0.2); letter-spacing: 2px; }
+
+  .slide-why { background: linear-gradient(160deg, #0B1E3F 0%, #0a1628 100%); }
+  .be-stat-strip { display: flex; gap: 32px; margin-bottom: 48px; opacity: 0; animation: fadeUp 0.6s 0.15s ease forwards; flex-wrap: wrap; }
+  .be-stat { display: flex; flex-direction: column; gap: 4px; }
+  .be-stat strong { font-family: var(--font-display); font-size: 28px; font-weight: 700; background: linear-gradient(135deg, var(--be-bright), var(--be-accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .be-stat span { font-size: 12px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; }
+  .why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; opacity: 0; animation: fadeUp 0.6s 0.2s ease forwards; }
+  .why-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 32px; position: relative; overflow: hidden; transition: transform 0.3s, border-color 0.3s; }
+  .why-card:hover { transform: translateY(-4px); border-color: rgba(0,148,255,0.4); }
+  .why-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--be-blue), var(--be-accent)); }
+  .why-icon { font-size: 32px; margin-bottom: 16px; }
+  .why-card h3 { font-family: var(--font-display); font-size: 22px; font-weight: 700; margin-bottom: 12px; }
+  .why-card p { font-size: 14px; line-height: 1.7; color: rgba(255,255,255,0.6); }
+
+  .slide-bring { background: linear-gradient(160deg, #071428 0%, #0B1E3F 100%); }
+  .bring-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; opacity: 0; animation: fadeUp 0.6s 0.2s ease forwards; }
+  .metric-list { display: flex; flex-direction: column; gap: 16px; }
+  .metric-item { display: flex; align-items: flex-start; gap: 20px; padding: 18px 22px; background: rgba(255,255,255,0.04); border-radius: 14px; border: 1px solid rgba(255,255,255,0.07); transition: all 0.3s; }
+  .metric-item:hover { background: rgba(0,148,255,0.08); border-color: rgba(0,148,255,0.2); }
+  .metric-num { font-family: var(--font-display); font-size: 28px; font-weight: 700; background: linear-gradient(135deg, var(--be-bright), var(--be-accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; min-width: 72px; text-align: center; flex-shrink: 0; }
+  .metric-text strong { display: block; font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .metric-text span { font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.5; }
+  .story-block { display: flex; flex-direction: column; gap: 18px; }
+  .story-item { padding: 22px; border-radius: 16px; border-left: 3px solid var(--be-blue); background: rgba(0,87,184,0.08); }
+  .story-item h4 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--be-accent); margin-bottom: 8px; }
+  .story-item p { font-size: 13px; line-height: 1.7; color: rgba(255,255,255,0.7); }
+
+  .slide-relo { background: radial-gradient(ellipse at center, rgba(0,87,184,0.3) 0%, #071428 70%); }
+  .relo-content { max-width: 800px; opacity: 0; animation: fadeUp 0.6s 0.2s ease forwards; }
+  .relo-statement { font-family: var(--font-display); font-size: clamp(20px, 2.5vw, 32px); font-weight: 700; line-height: 1.5; margin-bottom: 40px; }
+  .relo-statement em { background: linear-gradient(135deg, var(--be-bright), var(--be-accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-style: normal; }
+  .commitment-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 40px; }
+  .commitment-card { text-align: center; padding: 28px 20px; background: rgba(255,255,255,0.04); border-radius: 16px; border: 1px solid rgba(255,255,255,0.08); }
+  .commitment-icon { font-size: 36px; margin-bottom: 12px; }
+  .commitment-card h4 { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+  .commitment-card p { font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.6; }
+  .relo-quote { background: rgba(0,148,255,0.1); border: 1px solid rgba(0,148,255,0.25); border-radius: 16px; padding: 28px 32px; font-size: 15px; line-height: 1.8; color: rgba(255,255,255,0.85); font-style: italic; }
+
+  .slide-plan { background: linear-gradient(160deg, #071428 0%, #0B1E3F 100%); }
+  .plan-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; opacity: 0; animation: fadeUp 0.6s 0.2s ease forwards; }
+  .plan-card { border-radius: 20px; padding: 28px; }
+  .plan-card-1 { background: rgba(0,87,184,0.15); border: 1px solid rgba(0,87,184,0.4); }
+  .plan-card-2 { background: rgba(0,148,255,0.15); border: 1px solid rgba(0,148,255,0.4); }
+  .plan-card-3 { background: rgba(0,199,255,0.12); border: 1px solid rgba(0,199,255,0.3); }
+  .plan-day { font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; opacity: 0.6; margin-bottom: 8px; }
+  .plan-title { font-family: var(--font-display); font-size: 26px; font-weight: 700; margin-bottom: 20px; }
+  .plan-items { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .plan-items li { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; line-height: 1.5; color: rgba(255,255,255,0.75); }
+  .plan-items li::before { content: '→'; color: var(--be-accent); font-weight: 700; flex-shrink: 0; }
+
+  .slide-close { background: var(--be-navy); background-image: radial-gradient(ellipse 60% 80% at 30% 50%, rgba(0,87,184,0.35) 0%, transparent 60%), radial-gradient(ellipse 40% 40% at 80% 20%, rgba(0,199,255,0.12) 0%, transparent 50%); text-align: center; align-items: center; }
+  .close-content { max-width: 740px; opacity: 0; animation: fadeUp 0.6s 0.1s ease forwards; }
+  .close-headline { font-family: var(--font-display); font-size: clamp(32px, 4.5vw, 58px); font-weight: 900; line-height: 1.15; margin-bottom: 28px; }
+  .climate-block { background: rgba(0,148,255,0.08); border: 1px solid rgba(0,148,255,0.2); border-radius: 20px; padding: 28px 32px; margin-bottom: 36px; text-align: left; }
+  .climate-block p { font-size: 15px; line-height: 1.85; color: rgba(255,255,255,0.8); }
+  .climate-block p + p { margin-top: 14px; }
+  .close-contact { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; margin-bottom: 36px; }
+  .contact-item { display: flex; align-items: center; gap: 10px; font-size: 14px; color: rgba(255,255,255,0.7); text-decoration: none; transition: color 0.2s; }
+  .contact-item:hover { color: var(--be-accent); }
+  .contact-icon { width: 34px; height: 34px; border-radius: 8px; background: rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center; font-size: 15px; }
+  .close-final { font-family: var(--font-display); font-size: 18px; font-weight: 700; font-style: italic; color: rgba(255,255,255,0.3); }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeLeft { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
+
+  @media (max-width: 900px) {
+    .slide { padding: 48px 32px; }
+    .hero-stats { display: none; }
+    .why-grid, .bring-layout, .commitment-grid, .plan-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav-dots">
+  <button class="nav-dot active" onclick="scrollToSlide(0)"></button>
+  <button class="nav-dot" onclick="scrollToSlide(1)"></button>
+  <button class="nav-dot" onclick="scrollToSlide(2)"></button>
+  <button class="nav-dot" onclick="scrollToSlide(3)"></button>
+  <button class="nav-dot" onclick="scrollToSlide(4)"></button>
+  <button class="nav-dot" onclick="scrollToSlide(5)"></button>
+</nav>
+
+<!-- SLIDE 1 -->
+<section class="slide slide-hero" id="slide-0">
+  <div>
+    <div class="hero-tag">Senior Corporate Recruiter — BrightEdge</div>
+    <h1 class="hero-name">Monique<br><span>"Mo"</span> Stevens</h1>
+    <p class="hero-title">Full-Cycle Recruiter &nbsp;·&nbsp; G&A and GTM Specialist &nbsp;·&nbsp; Relocating to Chicago ASAP</p>
+    <div class="hero-cta">
+      <a href="mailto:moniquegstevens@gmail.com" class="btn-primary">📬 moniquegstevens@gmail.com</a>
+      <a href="https://linkedin.com/in/moniquegstevens" class="btn-ghost" target="_blank">LinkedIn ↗</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-card"><div class="stat-number">98%</div><div class="stat-label">HM Satisfaction</div></div>
+    <div class="stat-card"><div class="stat-number">20%</div><div class="stat-label">Time-to-Fill Down</div></div>
+    <div class="stat-card"><div class="stat-number">4+</div><div class="stat-label">Years Full-Cycle</div></div>
+  </div>
+  <div class="slide-num">01 / 06</div>
+</section>
+
+<!-- SLIDE 2 -->
+<section class="slide slide-why" id="slide-1">
+  <div class="slide-label">Why This Role</div>
+  <h2 class="slide-heading">Why BrightEdge.</h2>
+  <div class="divider"></div>
+  <div class="be-stat-strip">
+    <div class="be-stat"><strong>$120M</strong><span>Annual Revenue</span></div>
+    <div class="be-stat"><strong>1,700+</strong><span>Global Customers</span></div>
+    <div class="be-stat"><strong>57%</strong><span>Fortune 100</span></div>
+    <div class="be-stat"><strong>500+</strong><span>Employees</span></div>
+    <div class="be-stat"><strong>Since 2007</strong><span>Founded</span></div>
+  </div>
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="why-icon">🚀</div>
+      <h3>Consistent Growth at Scale</h3>
+      <p>BrightEdge grew from $61M to $120M in revenue in two years. A company at this trajectory needs a recruiter who builds fast without breaking things. That is exactly how I work.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">🎯</div>
+      <h3>Mission That Matters</h3>
+      <p>Enterprise SEO is not just software. It is how brands compete for attention in a world flooded with content. The people BrightEdge hires directly determine whether that mission lands. Recruiting here means something.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">🤝</div>
+      <h3>The Right Stage</h3>
+      <p>BrightEdge is at the scale where recruiting strategy actually shapes the company. Not a startup with no process and not a mega-corp where I am one of fifty recruiters. It is the exact sweet spot where I do my best work.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">📍</div>
+      <h3>Chicago Is My Next Chapter</h3>
+      <p>I have been targeting Chicago for over a year. BrightEdge's Chicago presence is not incidental to my search. It is one of the reasons this role landed at the top of my list and stayed there.</p>
+    </div>
+  </div>
+  <div class="slide-num">02 / 06</div>
+</section>
+
+<!-- SLIDE 3 -->
+<section class="slide slide-bring" id="slide-2">
+  <div class="slide-label">Track Record</div>
+  <h2 class="slide-heading">What I Bring.</h2>
+  <div class="divider"></div>
+  <div class="bring-layout">
+    <div class="metric-list">
+      <div class="metric-item">
+        <div class="metric-num">98%</div>
+        <div class="metric-text">
+          <strong>Hiring Manager Satisfaction</strong>
+          <span>Across 6 teams at Uniti Group including VP and Director level leaders who came back every single search</span>
+        </div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-num">20%</div>
+        <div class="metric-text">
+          <strong>Time-to-Fill Reduction</strong>
+          <span>Achieved at two separate organizations through data-driven intake and process improvements</span>
+        </div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-num">90%+</div>
+        <div class="metric-text">
+          <strong>Offer Acceptance Rate</strong>
+          <span>Across all G&A, GTM, and corporate searches at Motorola Solutions, Uniti Group, and STS Technical Services spanning the U.S., Canada, and Mexico</span>
+        </div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-num">100%</div>
+        <div class="metric-text">
+          <strong>Day 1 Readiness</strong>
+          <span>Built a dashboard for 50 or more weekly new hires connecting the heads of IT, L&D, HR, and Finance after identifying recurring orientation issues around equipment, system access, and scheduling. Issues dropped from roughly 50% to zero in two weeks.</span>
+        </div>
+      </div>
+    </div>
+    <div class="story-block">
+      <div class="story-item">
+        <h4>The Google SRE Close</h4>
+        <p>A 3-person hire had been stalled for months at Motorola. Every offer died at compensation. I originated a 4-year sign-on clawback structure no one had tried before, resolved the impasse, and closed all three. 100% team retention.</p>
+      </div>
+      <div class="story-item">
+        <h4>Built From Zero at STS</h4>
+        <p>At STS Technical Services I was the sole recruiter for a $2B global company with no existing infrastructure. I built every system from scratch including intake frameworks, sourcing workflows, scorecards, and candidate communications. Reduced time-to-fill by 20% in 4 months and was promoted to sole RPO Lead within 3 months.</p>
+      </div>
+      <div class="story-item">
+        <h4>Onboarding Transformation at Uniti</h4>
+        <p>During orientation I kept hearing the same issues from new hires around equipment not arriving, system access not being set up, and scheduling conflicts. I built a unified dashboard connecting the heads of IT, L&D, HR, and Finance to fix the root problem. Day 1 issues dropped to zero within two weeks.</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">03 / 06</div>
+</section>
+
+<!-- SLIDE 4 -->
+<section class="slide slide-relo" id="slide-3">
+  <div class="slide-label">The Question You Have</div>
+  <div class="relo-content">
+    <h2 class="slide-heading">Let's Address the<br>Elephant in the Room.</h2>
+    <div class="divider"></div>
+    <p class="relo-statement">
+      I know you want someone in Chicago on Day 1.<br>
+      <em>I am asking you to make an exception, and here is why that exception is worth it.</em>
+    </p>
+    <div class="commitment-grid">
+      <div class="commitment-card">
+        <div class="commitment-icon">📦</div>
+        <h4>Lease Ends August 2026</h4>
+        <p>My Milwaukee lease ends in August but I am not waiting. I am actively searching Chicago neighborhoods right now and planning to move as soon as possible.</p>
+      </div>
+      <div class="commitment-card">
+        <div class="commitment-icon">🚄</div>
+        <h4>Milwaukee to Chicago: 90 Minutes</h4>
+        <p>I can be in the Chicago office within 90 minutes by Amtrak any time you need me there during the transition. I will show up.</p>
+      </div>
+      <div class="commitment-card">
+        <div class="commitment-icon">🎯</div>
+        <h4>Chicago Is the Goal</h4>
+        <p>This is not a casual preference. I have been building toward Chicago for over a year. BrightEdge is part of why Chicago is the goal.</p>
+      </div>
+    </div>
+    <div class="relo-quote">
+      "I am not asking BrightEdge to take a chance on someone who might relocate. I am asking you to hire the right person who is already in motion, and let the paperwork catch up to the decision."
+    </div>
+  </div>
+  <div class="slide-num">04 / 06</div>
+</section>
+
+<!-- SLIDE 5 -->
+<section class="slide slide-plan" id="slide-4">
+  <div class="slide-label">My Plan</div>
+  <h2 class="slide-heading">My First 90 Days.</h2>
+  <div class="divider"></div>
+  <div class="plan-grid">
+    <div class="plan-card plan-card-1">
+      <div class="plan-day">Days 1 to 30</div>
+      <div class="plan-title">Learn</div>
+      <ul class="plan-items">
+        <li>Deeply understand BrightEdge's product, values, and what great talent looks like in each function</li>
+        <li>Meet every hiring manager for assigned reqs and build trust before building pipelines</li>
+        <li>Get inside the ATS, sourcing strategy, and hiring cadence from Day 1</li>
+        <li>Map the Chicago talent market for the G&A and GTM functions I will own</li>
+        <li>Listen more than I talk and identify any patterns worth fixing early</li>
+      </ul>
+    </div>
+    <div class="plan-card plan-card-2">
+      <div class="plan-day">Days 31 to 60</div>
+      <div class="plan-title">Contribute</div>
+      <ul class="plan-items">
+        <li>Own full-cycle searches independently for assigned G&A and GTM reqs</li>
+        <li>Run structured intakes with every new hiring manager request</li>
+        <li>Build passive pipelines for hard-to-fill roles before they become urgent</li>
+        <li>Share weekly pipeline health reports with hiring managers and leadership</li>
+        <li>Identify process gaps and propose improvements with data behind them</li>
+      </ul>
+    </div>
+    <div class="plan-card plan-card-3">
+      <div class="plan-day">Days 61 to 90</div>
+      <div class="plan-title">Optimize</div>
+      <ul class="plan-items">
+        <li>First hires closed with quality and speed of hire tracked and shared with leadership</li>
+        <li>Hiring manager satisfaction documented and reported</li>
+        <li>One process improvement recommended based on what I have observed</li>
+        <li>Fully settled in Chicago and present in the office when the team needs me</li>
+        <li>Positioned as the recruiter hiring managers ask for by name</li>
+      </ul>
+    </div>
+  </div>
+  <div class="slide-num">05 / 06</div>
+</section>
+
+<!-- SLIDE 6 -->
+<section class="slide slide-close" id="slide-5">
+  <div class="close-content">
+    <div class="slide-label" style="text-align:center;">The Ask</div>
+    <h2 class="close-headline">
+      I am not just applying.<br>
+      <span style="background: linear-gradient(135deg, #0094FF, #00C7FF); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">I am asking to build something.</span>
+    </h2>
+
+    <div class="climate-block">
+      <p>Someone once asked me why I am still in recruiting when so many people move on after a few years. I think about it like climate versus weather. Weather changes constantly. Some days in recruiting are exhausting, frustrating, slow. But climate is the consistent state underneath all of that. My climate is a genuine appreciation for this work and what it produces for people on both sides of the table. That consistency is why I have stayed, and it is what I bring to every search I own.</p>
+      <p>I absorb confusion and produce clarity. For every req, every hiring manager, and every candidate who walks through the process at BrightEdge, that is what you will get.</p>
+    </div>
+
+    <div class="close-contact">
+      <a href="mailto:moniquegstevens@gmail.com" class="contact-item">
+        <span class="contact-icon">📬</span>moniquegstevens@gmail.com
+      </a>
+      <a href="tel:2629607991" class="contact-item">
+        <span class="contact-icon">📞</span>262-960-7991
+      </a>
+      <a href="https://linkedin.com/in/moniquegstevens" target="_blank" class="contact-item">
+        <span class="contact-icon">💼</span>linkedin.com/in/moniquegstevens
+      </a>
+      <a href="https://moniquegstevens.github.io" target="_blank" class="contact-item">
+        <span class="contact-icon">🌐</span>moniquegstevens.github.io
+      </a>
+    </div>
+    <div class="close-final">"My superpower is being the bridge."</div>
+  </div>
+  <div class="slide-num">06 / 06</div>
+</section>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const dots = document.querySelectorAll('.nav-dot');
+  function scrollToSlide(i) { slides[i].scrollIntoView({ behavior: 'smooth' }); }
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const i = Array.from(slides).indexOf(e.target);
+        dots.forEach(d => d.classList.remove('active'));
+        if (dots[i]) dots[i].classList.add('active');
+      }
+    });
+  }, { threshold: 0.4 });
+  slides.forEach(s => obs.observe(s));
+</script>
+</body>
+</html>
