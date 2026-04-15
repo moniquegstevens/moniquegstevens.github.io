@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mo Stevens — JLL</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  :root{
+    --jll-red:#E30613;--jll-dark:#212529;--jll-darkest:#111315;
+    --jll-light-red:#FF3A44;--jll-pale:#FFF5F5;--jll-white:#FFFFFF;
+    --jll-gray:#6B7280;--jll-border:#E5E7EB;
+    --fd:'Playfair Display',serif;--fb:'DM Sans',sans-serif;
+  }
+  html{scroll-behavior:smooth;}
+  body{font-family:var(--fb);background:var(--jll-white);color:var(--jll-dark);overflow-x:hidden;}
+  .nav-dots{position:fixed;right:28px;top:50%;transform:translateY(-50%);z-index:100;display:flex;flex-direction:column;gap:12px;}
+  .nav-dot{width:8px;height:8px;border-radius:50%;background:rgba(227,6,19,0.25);cursor:pointer;transition:all 0.3s;border:none;}
+  .nav-dot.active,.nav-dot:hover{background:var(--jll-red);transform:scale(1.5);}
+  .slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:60px 80px;position:relative;overflow:hidden;}
+
+  /* HERO */
+  .slide-hero{background:var(--jll-darkest);color:white;}
+  .slide-hero::after{content:'';position:absolute;top:0;right:0;width:45%;height:100%;background:linear-gradient(135deg,var(--jll-red) 0%,#8B0000 100%);clip-path:polygon(15% 0,100% 0,100% 100%,0% 100%);opacity:0.85;}
+  .hero-content{position:relative;z-index:2;}
+  .hero-tag{display:inline-block;background:rgba(227,6,19,0.2);border:1px solid rgba(227,6,19,0.5);color:#FF8A8F;font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;padding:8px 18px;border-radius:100px;margin-bottom:32px;animation:fadeUp 0.8s ease both;}
+  .hero-name{font-family:var(--fd);font-size:clamp(48px,7vw,92px);font-weight:900;line-height:1;margin-bottom:16px;color:white;animation:fadeUp 0.8s 0.1s ease both;}
+  .hero-name span{color:var(--jll-red);}
+  .hero-title{font-size:clamp(15px,2vw,21px);font-weight:300;color:rgba(255,255,255,0.72);margin-bottom:48px;animation:fadeUp 0.8s 0.2s ease both;}
+  .hero-cta{display:flex;gap:20px;flex-wrap:wrap;animation:fadeUp 0.8s 0.3s ease both;}
+  .btn-red{background:var(--jll-red);color:white;padding:14px 32px;border-radius:6px;font-weight:700;font-size:15px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:transform 0.2s,box-shadow 0.2s;}
+  .btn-red:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(227,6,19,0.45);}
+  .btn-ghost{border:1px solid rgba(255,255,255,0.35);color:white;padding:14px 32px;border-radius:6px;font-weight:500;font-size:15px;text-decoration:none;transition:all 0.2s;}
+  .btn-ghost:hover{background:rgba(255,255,255,0.08);}
+  .hero-stats{position:absolute;right:80px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:20px;animation:fadeLeft 0.8s 0.4s ease both;z-index:3;}
+  .stat-card{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:14px;padding:22px 28px;text-align:center;min-width:150px;}
+  .stat-number{font-family:var(--fd);font-size:38px;font-weight:700;color:white;line-height:1;margin-bottom:6px;}
+  .stat-label{font-size:11px;font-weight:500;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:1.5px;}
+
+  .slide-light{background:var(--jll-white);}
+  .slide-off{background:#FAFAFA;}
+  .slide-dark{background:var(--jll-darkest);color:white;}
+  .slide-red{background:var(--jll-red);color:white;}
+
+  .slide-label{font-size:11px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:var(--jll-red);margin-bottom:16px;opacity:0;animation:fadeUp 0.6s ease forwards;}
+  .slide-label.light{color:rgba(255,255,255,0.6);}
+  .slide-heading{font-family:var(--fd);font-size:clamp(32px,4.5vw,58px);font-weight:700;line-height:1.1;margin-bottom:40px;opacity:0;animation:fadeUp 0.6s 0.1s ease forwards;}
+  .slide-heading.light{color:white;}
+  .divider{width:50px;height:3px;background:var(--jll-red);border-radius:2px;margin-bottom:28px;opacity:0;animation:fadeUp 0.6s 0.05s ease forwards;}
+  .divider.light{background:rgba(255,255,255,0.5);}
+  .slide-num{position:absolute;bottom:40px;left:80px;font-size:12px;color:rgba(33,37,41,0.3);letter-spacing:2px;}
+  .slide-num.light{color:rgba(255,255,255,0.3);}
+
+  .stat-strip{display:flex;gap:28px;margin-bottom:40px;opacity:0;animation:fadeUp 0.6s 0.15s ease forwards;flex-wrap:wrap;}
+  .j-stat{display:flex;flex-direction:column;gap:4px;}
+  .j-stat strong{font-family:var(--fd);font-size:26px;font-weight:700;color:var(--jll-red);}
+  .j-stat span{font-size:11px;color:var(--jll-gray);text-transform:uppercase;letter-spacing:1px;}
+  .why-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;opacity:0;animation:fadeUp 0.6s 0.2s ease forwards;}
+  .why-card{background:var(--jll-white);border:1px solid var(--jll-border);border-radius:16px;padding:28px;position:relative;overflow:hidden;transition:transform 0.3s,box-shadow 0.3s;box-shadow:0 2px 8px rgba(0,0,0,0.05);}
+  .why-card:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(227,6,19,0.12);}
+  .why-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--jll-red);}
+  .why-icon{font-size:28px;margin-bottom:14px;}
+  .why-card h3{font-family:var(--fd);font-size:19px;font-weight:700;margin-bottom:10px;color:var(--jll-dark);}
+  .why-card p{font-size:14px;line-height:1.7;color:var(--jll-gray);}
+
+  .bring-layout{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start;opacity:0;animation:fadeUp 0.6s 0.2s ease forwards;}
+  .metric-list{display:flex;flex-direction:column;gap:14px;}
+  .metric-item{display:flex;align-items:flex-start;gap:18px;padding:16px 20px;background:var(--jll-white);border-radius:12px;border:1px solid var(--jll-border);box-shadow:0 2px 5px rgba(0,0,0,0.04);transition:all 0.3s;}
+  .metric-item:hover{border-color:var(--jll-red);box-shadow:0 6px 18px rgba(227,6,19,0.1);}
+  .metric-num{font-family:var(--fd);font-size:26px;font-weight:700;color:var(--jll-red);min-width:68px;text-align:center;flex-shrink:0;}
+  .metric-text strong{display:block;font-size:13px;font-weight:600;margin-bottom:3px;color:var(--jll-dark);}
+  .metric-text span{font-size:12px;color:var(--jll-gray);line-height:1.5;}
+  .story-block{display:flex;flex-direction:column;gap:16px;}
+  .story-item{padding:20px;border-radius:14px;border-left:3px solid var(--jll-red);background:#FAFAFA;}
+  .story-item h4{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--jll-red);margin-bottom:7px;}
+  .story-item p{font-size:13px;line-height:1.7;color:#444;}
+
+  .chicago-content{max-width:780px;opacity:0;animation:fadeUp 0.6s 0.2s ease forwards;}
+  .chicago-statement{font-family:var(--fd);font-size:clamp(20px,2.5vw,30px);font-weight:700;line-height:1.5;margin-bottom:36px;color:white;}
+  .chicago-statement em{color:#FFB3B6;font-style:normal;}
+  .commitment-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:36px;}
+  .commitment-card{text-align:center;padding:24px 16px;background:rgba(255,255,255,0.1);border-radius:14px;border:1px solid rgba(255,255,255,0.2);}
+  .commitment-icon{font-size:32px;margin-bottom:10px;}
+  .commitment-card h4{font-size:14px;font-weight:700;margin-bottom:7px;color:white;}
+  .commitment-card p{font-size:12px;color:rgba(255,255,255,0.65);line-height:1.6;}
+  .chicago-quote{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.25);border-radius:14px;padding:24px 28px;font-size:15px;line-height:1.8;color:rgba(255,255,255,0.92);font-style:italic;}
+
+  .plan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;opacity:0;animation:fadeUp 0.6s 0.2s ease forwards;}
+  .plan-card{border-radius:18px;padding:26px;}
+  .plan-card-1{background:var(--jll-white);border:1px solid var(--jll-border);box-shadow:0 2px 6px rgba(0,0,0,0.05);}
+  .plan-card-2{background:var(--jll-red);color:white;}
+  .plan-card-3{background:var(--jll-darkest);color:white;}
+  .plan-day{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;opacity:0.55;margin-bottom:7px;}
+  .plan-title{font-family:var(--fd);font-size:24px;font-weight:700;margin-bottom:18px;}
+  .plan-items{list-style:none;display:flex;flex-direction:column;gap:9px;}
+  .plan-items li{display:flex;align-items:flex-start;gap:9px;font-size:12px;line-height:1.5;}
+  .plan-card-1 .plan-items li{color:#444;}
+  .plan-card-2 .plan-items li,.plan-card-3 .plan-items li{color:rgba(255,255,255,0.82);}
+  .plan-items li::before{content:'→';font-weight:700;flex-shrink:0;}
+  .plan-card-1 .plan-items li::before{color:var(--jll-red);}
+  .plan-card-2 .plan-items li::before,.plan-card-3 .plan-items li::before{color:rgba(255,255,255,0.6);}
+
+  .slide-close{background:var(--jll-darkest);color:white;text-align:center;align-items:center;}
+  .close-content{max-width:720px;opacity:0;animation:fadeUp 0.6s 0.1s ease both;}
+  .close-headline{font-family:var(--fd);font-size:clamp(28px,4vw,50px);font-weight:900;line-height:1.15;margin-bottom:24px;color:white;}
+  .close-headline span{color:var(--jll-red);}
+  .values-strip{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:32px;}
+  .value-pill{background:rgba(227,6,19,0.15);border:1px solid rgba(227,6,19,0.4);border-radius:100px;padding:7px 16px;font-size:12px;font-weight:600;color:#FF8A8F;}
+  .climate-block{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:18px;padding:26px 30px;margin-bottom:32px;text-align:left;}
+  .climate-block p{font-size:14px;line-height:1.85;color:rgba(255,255,255,0.8);}
+  .climate-block p+p{margin-top:12px;}
+  .close-contact{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin-bottom:32px;}
+  .contact-item{display:flex;align-items:center;gap:9px;font-size:13px;color:rgba(255,255,255,0.65);text-decoration:none;transition:color 0.2s;}
+  .contact-item:hover{color:var(--jll-red);}
+  .contact-icon{width:32px;height:32px;border-radius:7px;background:rgba(227,6,19,0.15);display:flex;align-items:center;justify-content:center;font-size:14px;}
+  .close-final{font-family:var(--fd);font-size:17px;font-weight:700;font-style:italic;color:rgba(255,255,255,0.3);}
+
+  @keyframes fadeUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
+  @keyframes fadeLeft{from{opacity:0;transform:translateX(28px);}to{opacity:1;transform:translateX(0);}}
+  @media(max-width:900px){.slide{padding:48px 32px;}.hero-stats{display:none;}.slide-hero::after{display:none;}.why-grid,.bring-layout,.commitment-grid,.plan-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<nav class="nav-dots">
+  <button class="nav-dot active" onclick="scrollToSlide(0)"></button>
+  <button class="nav-dot" onclick="scrollToSlide(1)"></button>
+  <button class="nav-dot" onclick="scrollToSlide(2)"></button>
+  <button class="nav-dot" onclick="scrollToSlide(3)"></button>
+  <button class="nav-dot" onclick="scrollToSlide(4)"></button>
+  <button class="nav-dot" onclick="scrollToSlide(5)"></button>
+</nav>
+
+<!-- SLIDE 1 -->
+<section class="slide slide-hero" id="slide-0">
+  <div class="hero-content">
+    <div class="hero-tag">Recruiter — JLL Chicago</div>
+    <h1 class="hero-name">Monique<br><span>"Mo"</span> Stevens</h1>
+    <p class="hero-title">Full-Cycle Recruiter &nbsp;·&nbsp; Corporate & Skilled Talent &nbsp;·&nbsp; Relocating to Chicago ASAP</p>
+    <div class="hero-cta">
+      <a href="mailto:moniquegstevens@gmail.com" class="btn-red">📬 moniquegstevens@gmail.com</a>
+      <a href="https://linkedin.com/in/moniquegstevens" class="btn-ghost" target="_blank">LinkedIn ↗</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-card"><div class="stat-number">98%</div><div class="stat-label">HM Satisfaction</div></div>
+    <div class="stat-card"><div class="stat-number">20%</div><div class="stat-label">Time-to-Fill Down</div></div>
+    <div class="stat-card"><div class="stat-number">4+</div><div class="stat-label">Years Full-Cycle</div></div>
+  </div>
+  <div class="slide-num light">01 / 06</div>
+</section>
+
+<!-- SLIDE 2 -->
+<section class="slide slide-off" id="slide-1">
+  <div class="slide-label">Why This Role</div>
+  <h2 class="slide-heading">Why JLL.</h2>
+  <div class="divider"></div>
+  <div class="stat-strip">
+    <div class="j-stat"><strong>$23B+</strong><span>Annual Revenue</span></div>
+    <div class="j-stat"><strong>100K+</strong><span>Employees</span></div>
+    <div class="j-stat"><strong>80+</strong><span>Countries</span></div>
+    <div class="j-stat"><strong>Since 1783</strong><span>Founded</span></div>
+    <div class="j-stat"><strong>Chicago HQ</strong><span>Aon Center</span></div>
+  </div>
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="why-icon">🏙️</div>
+      <h3>Chicago Is My Target</h3>
+      <p>I have been building toward Chicago for over a year. JLL's Chicago presence is not incidental to my search. The city headquarters at Aon Center is exactly where I want to be and I am actively relocating.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">🔨</div>
+      <h3>Industrial Recruiting Is My Background</h3>
+      <p>I have recruited skilled trades, field technicians, and operational roles in addition to corporate functions. The blend of corporate and trades recruiting that JLL needs is exactly the range I bring.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">🌍</div>
+      <h3>Scale That Matches My Ambition</h3>
+      <p>JLL operates in over 80 countries with more than 100,000 employees. I want to do my best work inside an organization with the resources, reach, and reputation to support real recruiting impact.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">💡</div>
+      <h3>Workday Is Already in My Stack</h3>
+      <p>JLL listed Workday as a huge plus. I have managed full recruiting lifecycles in Workday at Motorola Solutions including requisition creation, pipeline tracking, offer management, and data integrity.</p>
+    </div>
+  </div>
+  <div class="slide-num">02 / 06</div>
+</section>
+
+<!-- SLIDE 3 -->
+<section class="slide slide-light" id="slide-2">
+  <div class="slide-label">Track Record</div>
+  <h2 class="slide-heading">What I Bring.</h2>
+  <div class="divider"></div>
+  <div class="bring-layout">
+    <div class="metric-list">
+      <div class="metric-item">
+        <div class="metric-num">98%</div>
+        <div class="metric-text"><strong>Hiring Manager Satisfaction</strong><span>Across 6 teams at Uniti Group including VP and Director level leaders who came back every single search</span></div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-num">20%</div>
+        <div class="metric-text"><strong>Time-to-Fill Reduction</strong><span>Achieved at two separate organizations through structured intakes and data-driven process improvements</span></div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-num">90%+</div>
+        <div class="metric-text"><strong>Offer Acceptance Rate</strong><span>Across all corporate, field, and operational searches spanning the U.S., Canada, and Mexico</span></div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-num">100%</div>
+        <div class="metric-text"><strong>Day 1 Readiness</strong><span>Built a cross-functional onboarding dashboard for 50 or more weekly new hires. Issues dropped from roughly 50% to zero in two weeks.</span></div>
+      </div>
+    </div>
+    <div class="story-block">
+      <div class="story-item">
+        <h4>High-Volume Pipeline Experience</h4>
+        <p>At Uniti I managed 30 open reqs simultaneously across multiple states recruiting for Sales, Customer Success, Operations, and skilled field roles including union and non-union construction workers. High volume without sacrificing quality is my standard operating mode.</p>
+      </div>
+      <div class="story-item">
+        <h4>Built From Zero at STS</h4>
+        <p>I was the sole recruiter for a $2B global company with no existing recruiting infrastructure. Built every system from scratch including sourcing strategies, intake frameworks, and candidate communications. Reduced time-to-fill by 20% in 4 months.</p>
+      </div>
+      <div class="story-item">
+        <h4>Workday in Practice</h4>
+        <p>Managed the full recruiting lifecycle in Workday at Motorola Solutions including requisition creation, candidate tracking across concurrent pipelines, offer management, and data integrity. Already proficient, no ramp up needed.</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">03 / 06</div>
+</section>
+
+<!-- SLIDE 4 -->
+<section class="slide slide-dark" id="slide-3">
+  <div class="slide-label light">Relocation</div>
+  <div class="chicago-content">
+    <h2 class="slide-heading light">On Chicago<br>and Relocation.</h2>
+    <div class="divider light"></div>
+    <p class="chicago-statement">
+      JLL is headquartered in Chicago. Chicago is where I am going.<br>
+      <em>This is not a coincidence. It is why this role is at the top of my list.</em>
+    </p>
+    <div class="commitment-grid">
+      <div class="commitment-card">
+        <div class="commitment-icon">📦</div>
+        <h4>Actively Relocating</h4>
+        <p>My Milwaukee lease ends in August 2026 but I am not waiting. I am actively searching Chicago neighborhoods and planning to move as soon as possible.</p>
+      </div>
+      <div class="commitment-card">
+        <div class="commitment-icon">🚄</div>
+        <h4>90 Minutes Away</h4>
+        <p>Milwaukee to Chicago by Amtrak is 90 minutes. I can be onsite any time needed during the transition period without hesitation.</p>
+      </div>
+      <div class="commitment-card">
+        <div class="commitment-icon">🎯</div>
+        <h4>Chicago Is the Goal</h4>
+        <p>I have been targeting Chicago for over a year. JLL's onsite Chicago role is exactly the kind of opportunity I have been building toward.</p>
+      </div>
+    </div>
+    <div class="chicago-quote">
+      "I am not asking JLL to wait on someone who might relocate. I am already in motion and Chicago is where I am going."
+    </div>
+  </div>
+  <div class="slide-num light">04 / 06</div>
+</section>
+
+<!-- SLIDE 5 -->
+<section class="slide slide-off" id="slide-4">
+  <div class="slide-label">My Plan</div>
+  <h2 class="slide-heading">My First 90 Days.</h2>
+  <div class="divider"></div>
+  <div class="plan-grid">
+    <div class="plan-card plan-card-1">
+      <div class="plan-day" style="color:#888">Days 1 to 30</div>
+      <div class="plan-title" style="color:var(--jll-dark)">Learn</div>
+      <ul class="plan-items">
+        <li>Understand JLL's talent landscape, culture, and what great looks like in each function</li>
+        <li>Get inside Workday from Day 1 and learn existing pipeline structure and reporting</li>
+        <li>Meet every hiring manager for assigned reqs before building any pipeline</li>
+        <li>Build relationships with JLL's TA Center of Excellence peers from Day 1</li>
+        <li>Map the Chicago talent market for corporate and skilled trades functions</li>
+      </ul>
+    </div>
+    <div class="plan-card plan-card-2">
+      <div class="plan-day">Days 31 to 60</div>
+      <div class="plan-title">Contribute</div>
+      <ul class="plan-items">
+        <li>Own full-cycle searches for assigned reqs across corporate and field functions</li>
+        <li>Run structured intakes with every new hiring manager request</li>
+        <li>Build passive pipelines for complex and hard-to-fill roles before they become urgent</li>
+        <li>Deliver monthly recruiting metrics to internal and external clients</li>
+        <li>Establish a consistent candidate experience that reflects JLL's brand</li>
+      </ul>
+    </div>
+    <div class="plan-card plan-card-3">
+      <div class="plan-day">Days 61 to 90</div>
+      <div class="plan-title">Deliver</div>
+      <ul class="plan-items">
+        <li>First hires closed with quality and speed tracked and shared with leadership</li>
+        <li>Hiring manager satisfaction documented and reported</li>
+        <li>One process improvement recommended based on observations</li>
+        <li>Fully settled in Chicago and present onsite every day</li>
+        <li>Positioned as the recruiter hiring managers ask for by name</li>
+      </ul>
+    </div>
+  </div>
+  <div class="slide-num">05 / 06</div>
+</section>
+
+<!-- SLIDE 6 -->
+<section class="slide slide-close" id="slide-5">
+  <div class="close-content">
+    <div class="slide-label light" style="text-align:center;">The Ask</div>
+    <h2 class="close-headline">
+      I absorb confusion<br>and produce clarity.<br>
+      <span>For every req. Every time.</span>
+    </h2>
+    <div class="values-strip">
+      <span class="value-pill">Full-Cycle Ownership</span>
+      <span class="value-pill">Market Intelligence</span>
+      <span class="value-pill">Chicago Bound</span>
+      <span class="value-pill">Workday Ready</span>
+    </div>
+    <div class="climate-block">
+      <p>Someone once asked me why I am still in recruiting when so many people move on after a few years. I think about it like climate versus weather. Weather changes constantly. Some days in recruiting are exhausting, frustrating, slow. But climate is the consistent state underneath all of that. My climate is a genuine appreciation for this work and what it produces for people on both sides of the table.</p>
+      <p>At JLL the stakes are real. You are building teams that shape how millions of square feet of space gets developed, managed, and used. Every hire matters. I take that seriously and I show up accordingly.</p>
+    </div>
+    <div class="close-contact">
+      <a href="mailto:moniquegstevens@gmail.com" class="contact-item"><span class="contact-icon">📬</span>moniquegstevens@gmail.com</a>
+      <a href="tel:2629607991" class="contact-item"><span class="contact-icon">📞</span>262-960-7991</a>
+      <a href="https://linkedin.com/in/moniquegstevens" target="_blank" class="contact-item"><span class="contact-icon">💼</span>linkedin.com/in/moniquegstevens</a>
+      <a href="https://moniquegstevens.github.io" target="_blank" class="contact-item"><span class="contact-icon">🌐</span>moniquegstevens.github.io</a>
+    </div>
+    <div class="close-final">"My superpower is being the bridge."</div>
+  </div>
+  <div class="slide-num light">06 / 06</div>
+</section>
+
+<script>
+  const slides=document.querySelectorAll('.slide');
+  const dots=document.querySelectorAll('.nav-dot');
+  function scrollToSlide(i){slides[i].scrollIntoView({behavior:'smooth'});}
+  const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){const i=Array.from(slides).indexOf(e.target);dots.forEach(d=>d.classList.remove('active'));if(dots[i])dots[i].classList.add('active');}});},{threshold:0.4});
+  slides.forEach(s=>obs.observe(s));
+</script>
+</body>
+</html>

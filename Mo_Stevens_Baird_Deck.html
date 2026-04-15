@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mo Stevens — Baird</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  :root{
+    --baird-navy:#1B2F5E;--baird-dark:#0D1B3E;--baird-blue:#2B4A9A;
+    --baird-gold:#C8A84B;--baird-light:#F5F7FC;--baird-white:#FFFFFF;
+    --baird-text:#1A1A2E;--baird-gray:#6B7280;
+    --fd:'Playfair Display',serif;--fb:'DM Sans',sans-serif;
+  }
+  html{scroll-behavior:smooth;}
+  body{font-family:var(--fb);background:var(--baird-white);color:var(--baird-text);overflow-x:hidden;}
+  .nav-dots{position:fixed;right:28px;top:50%;transform:translateY(-50%);z-index:100;display:flex;flex-direction:column;gap:12px;}
+  .nav-dot{width:8px;height:8px;border-radius:50%;background:rgba(27,47,94,0.25);cursor:pointer;transition:all 0.3s;border:none;}
+  .nav-dot.active,.nav-dot:hover{background:var(--baird-gold);transform:scale(1.5);}
+  .slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:60px 80px;position:relative;overflow:hidden;}
+  
+  /* HERO - dark navy */
+  .slide-hero{background:linear-gradient(160deg,var(--baird-dark) 0%,var(--baird-navy) 50%,#263F7A 100%);color:white;}
+  .slide-hero::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(200,168,75,0.06) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;}
+  .hero-tag{display:inline-block;background:rgba(200,168,75,0.2);border:1px solid rgba(200,168,75,0.5);color:var(--baird-gold);font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;padding:8px 18px;border-radius:100px;margin-bottom:32px;animation:fadeUp 0.8s ease both;}
+  .hero-name{font-family:var(--fd);font-size:clamp(48px,7vw,92px);font-weight:900;line-height:1;margin-bottom:16px;color:white;animation:fadeUp 0.8s 0.1s ease both;}
+  .hero-name span{color:var(--baird-gold);}
+  .hero-title{font-size:clamp(15px,2vw,21px);font-weight:300;color:rgba(255,255,255,0.75);margin-bottom:48px;animation:fadeUp 0.8s 0.2s ease both;}
+  .hero-cta{display:flex;gap:20px;flex-wrap:wrap;animation:fadeUp 0.8s 0.3s ease both;}
+  .btn-gold{background:var(--baird-gold);color:var(--baird-dark);padding:14px 32px;border-radius:6px;font-weight:700;font-size:15px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:transform 0.2s,box-shadow 0.2s;}
+  .btn-gold:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(200,168,75,0.4);}
+  .btn-ghost{border:1px solid rgba(255,255,255,0.4);color:white;padding:14px 32px;border-radius:6px;font-weight:500;font-size:15px;text-decoration:none;transition:all 0.2s;}
+  .btn-ghost:hover{background:rgba(255,255,255,0.1);}
+  .hero-stats{position:absolute;right:80px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:20px;animation:fadeLeft 0.8s 0.4s ease both;}
+  .stat-card{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:14px;padding:22px 28px;text-align:center;min-width:150px;}
+  .stat-number{font-family:var(--fd);font-size:38px;font-weight:700;color:var(--baird-gold);line-height:1;margin-bottom:6px;}
+  .stat-label{font-size:11px;font-weight:500;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:1.5px;}
+
+  /* LIGHT SLIDES */
+  .slide-light{background:var(--baird-white);}
+  .slide-off{background:var(--baird-light);}
+  .slide-dark{background:var(--baird-navy);color:white;}
+
+  .slide-label{font-size:11px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:var(--baird-gold);margin-bottom:16px;opacity:0;animation:fadeUp 0.6s ease forwards;}
+  .slide-heading{font-family:var(--fd);font-size:clamp(32px,4.5vw,58px);font-weight:700;line-height:1.1;margin-bottom:40px;opacity:0;animation:fadeUp 0.6s 0.1s ease forwards;}
+  .slide-heading.light{color:white;}
+  .divider{width:50px;height:3px;background:linear-gradient(90deg,var(--baird-blue),var(--baird-gold));border-radius:2px;margin-bottom:28px;opacity:0;animation:fadeUp 0.6s 0.05s ease forwards;}
+  .slide-num{position:absolute;bottom:40px;left:80px;font-size:12px;color:rgba(27,47,94,0.3);letter-spacing:2px;}
+  .slide-num.light{color:rgba(255,255,255,0.3);}
+
+  /* WHY BAIRD */
+  .stat-strip{display:flex;gap:28px;margin-bottom:40px;opacity:0;animation:fadeUp 0.6s 0.15s ease forwards;flex-wrap:wrap;}
+  .b-stat{display:flex;flex-direction:column;gap:4px;}
+  .b-stat strong{font-family:var(--fd);font-size:26px;font-weight:700;color:var(--baird-blue);}
+  .b-stat span{font-size:11px;color:var(--baird-gray);text-transform:uppercase;letter-spacing:1px;}
+  .why-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;opacity:0;animation:fadeUp 0.6s 0.2s ease forwards;}
+  .why-card{background:var(--baird-white);border:1px solid #D8E0F0;border-radius:16px;padding:28px;position:relative;overflow:hidden;transition:transform 0.3s,box-shadow 0.3s;box-shadow:0 2px 8px rgba(27,47,94,0.06);}
+  .why-card:hover{transform:translateY(-3px);box-shadow:0 10px 32px rgba(27,47,94,0.12);}
+  .why-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--baird-blue),var(--baird-gold));}
+  .why-icon{font-size:28px;margin-bottom:14px;}
+  .why-card h3{font-family:var(--fd);font-size:19px;font-weight:700;margin-bottom:10px;color:var(--baird-text);}
+  .why-card p{font-size:14px;line-height:1.7;color:var(--baird-gray);}
+
+  /* WHAT I BRING */
+  .bring-layout{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start;opacity:0;animation:fadeUp 0.6s 0.2s ease forwards;}
+  .metric-list{display:flex;flex-direction:column;gap:14px;}
+  .metric-item{display:flex;align-items:flex-start;gap:18px;padding:16px 20px;background:var(--baird-white);border-radius:12px;border:1px solid #D8E0F0;box-shadow:0 2px 6px rgba(27,47,94,0.05);transition:all 0.3s;}
+  .metric-item:hover{border-color:var(--baird-blue);box-shadow:0 6px 20px rgba(27,47,94,0.1);}
+  .metric-num{font-family:var(--fd);font-size:26px;font-weight:700;color:var(--baird-blue);min-width:68px;text-align:center;flex-shrink:0;}
+  .metric-text strong{display:block;font-size:13px;font-weight:600;margin-bottom:3px;color:var(--baird-text);}
+  .metric-text span{font-size:12px;color:var(--baird-gray);line-height:1.5;}
+  .story-block{display:flex;flex-direction:column;gap:16px;}
+  .story-item{padding:20px;border-radius:14px;border-left:3px solid var(--baird-blue);background:var(--baird-light);box-shadow:0 2px 6px rgba(27,47,94,0.05);}
+  .story-item h4{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--baird-blue);margin-bottom:7px;}
+  .story-item p{font-size:13px;line-height:1.7;color:#444;}
+
+  /* MILWAUKEE */
+  .milw-content{max-width:780px;opacity:0;animation:fadeUp 0.6s 0.2s ease forwards;}
+  .milw-statement{font-family:var(--fd);font-size:clamp(20px,2.5vw,30px);font-weight:700;line-height:1.5;margin-bottom:36px;color:white;}
+  .milw-statement em{color:var(--baird-gold);font-style:normal;}
+  .commitment-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:36px;}
+  .commitment-card{text-align:center;padding:24px 16px;background:rgba(255,255,255,0.08);border-radius:14px;border:1px solid rgba(255,255,255,0.15);}
+  .commitment-icon{font-size:32px;margin-bottom:10px;}
+  .commitment-card h4{font-size:14px;font-weight:700;margin-bottom:7px;color:white;}
+  .commitment-card p{font-size:12px;color:rgba(255,255,255,0.6);line-height:1.6;}
+  .milw-quote{background:rgba(200,168,75,0.15);border:1px solid rgba(200,168,75,0.35);border-radius:14px;padding:24px 28px;font-size:15px;line-height:1.8;color:rgba(255,255,255,0.9);font-style:italic;}
+
+  /* PLAN */
+  .plan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;opacity:0;animation:fadeUp 0.6s 0.2s ease forwards;}
+  .plan-card{border-radius:18px;padding:26px;}
+  .plan-card-1{background:var(--baird-white);border:1px solid #D8E0F0;box-shadow:0 2px 6px rgba(27,47,94,0.06);}
+  .plan-card-2{background:var(--baird-blue);color:white;}
+  .plan-card-3{background:var(--baird-dark);color:white;}
+  .plan-day{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;opacity:0.55;margin-bottom:7px;}
+  .plan-title{font-family:var(--fd);font-size:24px;font-weight:700;margin-bottom:18px;}
+  .plan-items{list-style:none;display:flex;flex-direction:column;gap:9px;}
+  .plan-items li{display:flex;align-items:flex-start;gap:9px;font-size:12px;line-height:1.5;}
+  .plan-card-1 .plan-items li{color:#444;}
+  .plan-card-2 .plan-items li,.plan-card-3 .plan-items li{color:rgba(255,255,255,0.82);}
+  .plan-items li::before{content:'→';font-weight:700;flex-shrink:0;}
+  .plan-card-1 .plan-items li::before{color:var(--baird-blue);}
+  .plan-card-2 .plan-items li::before,.plan-card-3 .plan-items li::before{color:var(--baird-gold);}
+
+  /* CLOSE */
+  .slide-close{background:var(--baird-dark);color:white;text-align:center;align-items:center;}
+  .slide-close::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(200,168,75,0.05) 1px,transparent 1px);background-size:44px 44px;pointer-events:none;}
+  .close-content{max-width:720px;opacity:0;animation:fadeUp 0.6s 0.1s ease forwards;}
+  .close-headline{font-family:var(--fd);font-size:clamp(28px,4vw,52px);font-weight:900;line-height:1.15;margin-bottom:24px;color:white;}
+  .close-headline span{color:var(--baird-gold);}
+  .values-strip{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:32px;}
+  .value-pill{background:rgba(200,168,75,0.15);border:1px solid rgba(200,168,75,0.4);border-radius:100px;padding:7px 16px;font-size:12px;font-weight:600;color:var(--baird-gold);}
+  .climate-block{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);border-radius:18px;padding:26px 30px;margin-bottom:32px;text-align:left;}
+  .climate-block p{font-size:14px;line-height:1.85;color:rgba(255,255,255,0.82);}
+  .climate-block p+p{margin-top:12px;}
+  .close-contact{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin-bottom:32px;}
+  .contact-item{display:flex;align-items:center;gap:9px;font-size:13px;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.2s;}
+  .contact-item:hover{color:var(--baird-gold);}
+  .contact-icon{width:32px;height:32px;border-radius:7px;background:rgba(200,168,75,0.15);display:flex;align-items:center;justify-content:center;font-size:14px;}
+  .close-final{font-family:var(--fd);font-size:17px;font-weight:700;font-style:italic;color:rgba(255,255,255,0.3);}
+
+  @keyframes fadeUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
+  @keyframes fadeLeft{from{opacity:0;transform:translateX(28px);}to{opacity:1;transform:translateX(0);}}
+  @media(max-width:900px){.slide{padding:48px 32px;}.hero-stats{display:none;}.why-grid,.bring-layout,.commitment-grid,.plan-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<nav class="nav-dots">
+  <button class="nav-dot active" onclick="scrollToSlide(0)"></button>
+  <button class="nav-dot" onclick="scrollToSlide(1)"></button>
+  <button class="nav-dot" onclick="scrollToSlide(2)"></button>
+  <button class="nav-dot" onclick="scrollToSlide(3)"></button>
+  <button class="nav-dot" onclick="scrollToSlide(4)"></button>
+  <button class="nav-dot" onclick="scrollToSlide(5)"></button>
+</nav>
+
+<!-- SLIDE 1 -->
+<section class="slide slide-hero" id="slide-0">
+  <div>
+    <div class="hero-tag">Corporate Recruiter — Baird</div>
+    <h1 class="hero-name">Monique<br><span>"Mo"</span> Stevens</h1>
+    <p class="hero-title">Full-Cycle Recruiter &nbsp;·&nbsp; Trusted Talent Advisor &nbsp;·&nbsp; Milwaukee, WI &nbsp;·&nbsp; Fortune 100 Ready</p>
+    <div class="hero-cta">
+      <a href="mailto:moniquegstevens@gmail.com" class="btn-gold">📬 moniquegstevens@gmail.com</a>
+      <a href="https://linkedin.com/in/moniquegstevens" class="btn-ghost" target="_blank">LinkedIn ↗</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-card"><div class="stat-number">98%</div><div class="stat-label">HM Satisfaction</div></div>
+    <div class="stat-card"><div class="stat-number">20%</div><div class="stat-label">Time-to-Fill Down</div></div>
+    <div class="stat-card"><div class="stat-number">4+</div><div class="stat-label">Years Full-Cycle</div></div>
+  </div>
+  <div class="slide-num light">01 / 06</div>
+</section>
+
+<!-- SLIDE 2 -->
+<section class="slide slide-off" id="slide-1">
+  <div class="slide-label">Why This Role</div>
+  <h2 class="slide-heading">Why Baird.</h2>
+  <div class="divider"></div>
+  <div class="stat-strip">
+    <div class="b-stat"><strong>Since 1919</strong><span>Founded</span></div>
+    <div class="b-stat"><strong>23 Years</strong><span>Fortune 100 Best</span></div>
+    <div class="b-stat"><strong>Employee-Owned</strong><span>Structure</span></div>
+    <div class="b-stat"><strong>Milwaukee</strong><span>Headquarters</span></div>
+    <div class="b-stat"><strong>Global</strong><span>Reach</span></div>
+  </div>
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="why-icon">🤝</div>
+      <h3>The Baird Way Resonates</h3>
+      <p>Integrity, collaboration, and doing right by the people who rely on you. That is not corporate language to me. It is how I already operate in every search I run and every hiring manager relationship I build.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">🏆</div>
+      <h3>23 Consecutive Years on Fortune 100 Best</h3>
+      <p>That does not happen by accident. It happens when the associate experience is treated as seriously as the client experience. That is the kind of team I want to contribute to and help grow.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">📍</div>
+      <h3>Home Court Advantage</h3>
+      <p>I am a Milwaukee native, a UW-Milwaukee alumna, and I know this market. I can hit the ground running without a learning curve on the talent landscape, compensation benchmarks, or the culture of this city.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">🎯</div>
+      <h3>The Role Fits My Strengths</h3>
+      <p>Full-cycle recruiting, consultative hiring manager partnership, data-informed sourcing, and candidate experience. This is exactly the work I have been doing and doing well. The fit here is genuine not aspirational.</p>
+    </div>
+  </div>
+  <div class="slide-num">02 / 06</div>
+</section>
+
+<!-- SLIDE 3 -->
+<section class="slide slide-light" id="slide-2">
+  <div class="slide-label">Track Record</div>
+  <h2 class="slide-heading">What I Bring.</h2>
+  <div class="divider"></div>
+  <div class="bring-layout">
+    <div class="metric-list">
+      <div class="metric-item">
+        <div class="metric-num">98%</div>
+        <div class="metric-text"><strong>Hiring Manager Satisfaction</strong><span>Across 6 teams at Uniti Group including VP and Director level leaders who came back every single search</span></div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-num">20%</div>
+        <div class="metric-text"><strong>Time-to-Fill Reduction</strong><span>Achieved at two separate organizations through structured intakes and data-driven process improvements</span></div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-num">90%+</div>
+        <div class="metric-text"><strong>Offer Acceptance Rate</strong><span>Across corporate, technical, and business function searches spanning the U.S., Canada, and Mexico</span></div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-num">100%</div>
+        <div class="metric-text"><strong>Day 1 Readiness</strong><span>Built a cross-functional onboarding dashboard connecting IT, L&D, HR, and Finance for 50 or more weekly new hires. Issues dropped from roughly 50% to zero in two weeks.</span></div>
+      </div>
+    </div>
+    <div class="story-block">
+      <div class="story-item">
+        <h4>The Restaurant Host</h4>
+        <p>My first manager told me: "You are the first person every guest interacts with. In their eyes, you are the restaurant." I have carried that into every recruiting role since. As a recruiter I am often the first interaction a candidate has with a firm. That responsibility shapes everything I do.</p>
+      </div>
+      <div class="story-item">
+        <h4>Creative Problem Solving</h4>
+        <p>A multi-person hire had been stalled for months. Every offer died at compensation. I originated a creative compensation structure no one had tried before, resolved the impasse, and closed all candidates. 100% team retention followed.</p>
+      </div>
+      <div class="story-item">
+        <h4>Workday in Practice</h4>
+        <p>Managed the full recruiting lifecycle in Workday at Motorola Solutions including requisition creation, candidate tracking, offer management, and data integrity across multiple concurrent pipelines simultaneously.</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">03 / 06</div>
+</section>
+
+<!-- SLIDE 4 -->
+<section class="slide slide-dark" id="slide-3">
+  <div class="slide-label" style="color:var(--baird-gold)">Milwaukee</div>
+  <div class="milw-content">
+    <h2 class="slide-heading light">Why Milwaukee<br>Is an Advantage.</h2>
+    <div class="divider"></div>
+    <p class="milw-statement">
+      I am not relocating to Milwaukee for this role.<br>
+      <em>I already live here. I know this market. I am ready Day 1.</em>
+    </p>
+    <div class="commitment-grid">
+      <div class="commitment-card">
+        <div class="commitment-icon">🎓</div>
+        <h4>UW-Milwaukee Alumna</h4>
+        <p>BBA in Human Resources Management. Deep roots in the Milwaukee professional community and alumni network.</p>
+      </div>
+      <div class="commitment-card">
+        <div class="commitment-icon">🏙️</div>
+        <h4>Local Market Knowledge</h4>
+        <p>I know Milwaukee's talent landscape, compensation benchmarks, and the culture of this city's professional community from years of recruiting here.</p>
+      </div>
+      <div class="commitment-card">
+        <div class="commitment-icon">📅</div>
+        <h4>In-Office Ready</h4>
+        <p>Tuesday, Wednesday, and Thursday in-office schedule is exactly what I am looking for. No transition period needed.</p>
+      </div>
+    </div>
+    <div class="milw-quote">
+      "Baird has been on the Fortune 100 Best Companies to Work For list for 23 consecutive years. I want to be part of the team that earns year 24."
+    </div>
+  </div>
+  <div class="slide-num light">04 / 06</div>
+</section>
+
+<!-- SLIDE 5 -->
+<section class="slide slide-off" id="slide-4">
+  <div class="slide-label">My Plan</div>
+  <h2 class="slide-heading">My First 90 Days.</h2>
+  <div class="divider"></div>
+  <div class="plan-grid">
+    <div class="plan-card plan-card-1">
+      <div class="plan-day" style="color:#888">Days 1 to 30</div>
+      <div class="plan-title" style="color:var(--baird-text)">Learn</div>
+      <ul class="plan-items">
+        <li>Deeply understand Baird's culture, values, and what great talent looks like in each function</li>
+        <li>Get inside Workday and Beamery from Day 1 and learn the existing pipeline structure</li>
+        <li>Meet every hiring manager for assigned IT and corporate reqs before building a single pipeline</li>
+        <li>Learn what is working and what is not before suggesting any changes</li>
+        <li>Listen more than I talk in every intake, every meeting, every conversation</li>
+      </ul>
+    </div>
+    <div class="plan-card plan-card-2">
+      <div class="plan-day">Days 31 to 60</div>
+      <div class="plan-title">Contribute</div>
+      <ul class="plan-items">
+        <li>Own full-cycle searches independently for assigned reqs across IT and corporate functions</li>
+        <li>Run structured intakes with every new hiring manager request</li>
+        <li>Build passive pipelines for hard-to-fill roles before they become urgent</li>
+        <li>Report weekly on pipeline health, conversion rates, and market data</li>
+        <li>Deliver a candidate experience worthy of a Fortune 100 Best employer</li>
+      </ul>
+    </div>
+    <div class="plan-card plan-card-3">
+      <div class="plan-day">Days 61 to 90</div>
+      <div class="plan-title">Deliver</div>
+      <ul class="plan-items">
+        <li>First hires closed with quality and speed both tracked and shared</li>
+        <li>Hiring manager satisfaction documented and reported to the TA Manager</li>
+        <li>One process improvement proposed based on what I have observed</li>
+        <li>Recognized as a reliable, trusted partner by every hiring manager I support</li>
+        <li>Positioned as the recruiter people ask for by name</li>
+      </ul>
+    </div>
+  </div>
+  <div class="slide-num">05 / 06</div>
+</section>
+
+<!-- SLIDE 6 -->
+<section class="slide slide-close" id="slide-5">
+  <div class="close-content">
+    <div class="slide-label" style="text-align:center;color:var(--baird-gold)">The Ask</div>
+    <h2 class="close-headline">
+      I am not just a recruiter.<br>
+      <span>I am the first impression<br>your candidates have of Baird.</span>
+    </h2>
+    <div class="values-strip">
+      <span class="value-pill">Clients Come First</span>
+      <span class="value-pill">Integrity is Irreplaceable</span>
+      <span class="value-pill">The Baird Way</span>
+      <span class="value-pill">Best Place to Work</span>
+    </div>
+    <div class="climate-block">
+      <p>Years ago I worked as a host at a restaurant. My manager pulled me aside and said: "You are the first person every guest interacts with. In their eyes, you are the restaurant. Make it count." I have carried that into every recruiting role since.</p>
+      <p>As a recruiter, I am often the first human interaction a candidate has with a firm. At Baird, where the associate experience is treated as inseparable from the client experience, that responsibility matters even more. My superpower is being the bridge. I absorb confusion and produce clarity on both sides of the table.</p>
+    </div>
+    <div class="close-contact">
+      <a href="mailto:moniquegstevens@gmail.com" class="contact-item"><span class="contact-icon">📬</span>moniquegstevens@gmail.com</a>
+      <a href="tel:2629607991" class="contact-item"><span class="contact-icon">📞</span>262-960-7991</a>
+      <a href="https://linkedin.com/in/moniquegstevens" target="_blank" class="contact-item"><span class="contact-icon">💼</span>linkedin.com/in/moniquegstevens</a>
+      <a href="https://moniquegstevens.github.io" target="_blank" class="contact-item"><span class="contact-icon">🌐</span>moniquegstevens.github.io</a>
+    </div>
+    <div class="close-final">"My superpower is being the bridge."</div>
+  </div>
+  <div class="slide-num light">06 / 06</div>
+</section>
+
+<script>
+  const slides=document.querySelectorAll('.slide');
+  const dots=document.querySelectorAll('.nav-dot');
+  function scrollToSlide(i){slides[i].scrollIntoView({behavior:'smooth'});}
+  const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){const i=Array.from(slides).indexOf(e.target);dots.forEach(d=>d.classList.remove('active'));if(dots[i])dots[i].classList.add('active');}});},{threshold:0.4});
+  slides.forEach(s=>obs.observe(s));
+</script>
+</body>
+</html>
