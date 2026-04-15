@@ -138,6 +138,12 @@
   }
   .btn-outline:hover { background: white; }
 
+  .btn-accent {
+    background: var(--accent);
+    color: white;
+  }
+  .btn-accent:hover { background: #b5561f; }
+
   .divider {
     border: none;
     border-top: 1px solid var(--border);
@@ -203,6 +209,66 @@
     color: var(--warm-mid);
     font-weight: 500;
     letter-spacing: 0.04em;
+  }
+
+  /* DECK CARD */
+  .deck-section {
+    margin-bottom: 5rem;
+  }
+
+  .deck-card {
+    background: var(--charcoal);
+    border-radius: 20px;
+    padding: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .deck-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 48px rgba(28,28,28,0.2);
+  }
+
+  .deck-card-left {
+    flex: 1;
+    min-width: 260px;
+  }
+
+  .deck-tag {
+    display: inline-block;
+    background: rgba(196,98,45,0.25);
+    color: #F5A87A;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 100px;
+    margin-bottom: 1rem;
+  }
+
+  .deck-card h3 {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    color: white;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.75rem;
+    line-height: 1.2;
+  }
+
+  .deck-card p {
+    font-size: 14px;
+    color: rgba(247,244,238,0.6);
+    line-height: 1.7;
+    max-width: 460px;
+  }
+
+  .deck-card-right {
+    flex-shrink: 0;
   }
 
   .case-studies { display: flex; flex-direction: column; gap: 2px; }
@@ -311,7 +377,7 @@
   }
 
   .skill-list li::before {
-    content: '—';
+    content: ',';
     position: absolute;
     left: 0;
     color: var(--warm-mid);
@@ -376,12 +442,33 @@
     margin-bottom: 2rem;
   }
 
-  .contact-block .btn-primary {
+  .contact-links {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .contact-block .btn-accent {
     background: var(--accent);
     color: white;
   }
+  .contact-block .btn-accent:hover { background: #b5561f; }
 
-  .contact-block .btn-primary:hover { background: #b5561f; }
+  .contact-block .btn-outline-light {
+    background: transparent;
+    color: var(--cream);
+    border: 1px solid rgba(247,244,238,0.3);
+    border-radius: 100px;
+    padding: 10px 22px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .contact-block .btn-outline-light:hover { background: rgba(247,244,238,0.08); }
 
   footer {
     text-align: center;
@@ -401,12 +488,10 @@
     .hero { padding: 7rem 1.25rem 3rem; }
     .skills-grid { grid-template-columns: 1fr; }
     .fade-in { opacity: 1; transform: none; }
+    .deck-card { flex-direction: column; }
   }
 
-  .fade-in {
-    opacity: 1;
-    transform: none;
-  }
+  .fade-in { opacity: 1; transform: none; }
 </style>
 </head>
 <body>
@@ -415,6 +500,7 @@
   <div class="nav-name">Monique Stevens</div>
   <ul class="nav-links">
     <li><a href="#work">Work</a></li>
+    <li><a href="#decks">Decks</a></li>
     <li><a href="#skills">Skills</a></li>
     <li><a href="#experience">Experience</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -424,9 +510,9 @@
 <div style="padding: 0 2rem;">
   <div class="hero fade-in">
     <p class="hero-eyebrow">Senior TA & HR Operations Professional</p>
-    <p style="font-size: 13px; font-weight: 500; background: var(--accent-light); color: var(--accent); display: inline-block; padding: 6px 16px; border-radius: 100px; margin-bottom: 1.5rem; letter-spacing: 0.03em;">Remote ready · U.S. time zones including PST · Global EMEA experience · Open to relocation anywhere</p>
+    <p style="font-size: 13px; font-weight: 500; background: var(--accent-light); color: var(--accent); display: inline-block; padding: 6px 16px; border-radius: 100px; margin-bottom: 1.5rem; letter-spacing: 0.03em;">Remote ready &nbsp;·&nbsp; Milwaukee, WI &nbsp;·&nbsp; Open to relocation &nbsp;·&nbsp; Global EMEA experience</p>
     <h1>People-first recruiting,<br><em>systems that actually work.</em></h1>
-    <p class="hero-bio">Hi, I'm Mo! Senior Technical Recruiter, ex-Motorola, solo traveler across 9 countries, and the person organizations trust to fix what is broken and build what is missing. It started at City Year where I learned that showing up for people on day one matters more than most things. Five years later I still believe that, and I bring it into every search, every system, and every candidate conversation.</p>
+    <p class="hero-bio">Hi, I'm Mo! Senior Technical Recruiter, ex-Motorola, solo traveler across 9 countries, and the person organizations trust to fix what is broken and build what is missing. It started at City Year, where I completed an AmeriCorps service year, and learned that showing up for people on day one matters more than most things. Four years later I still believe that, and I bring it into every search, every system, and every candidate conversation.</p>
     <div class="hero-links">
       <a href="https://www.linkedin.com/in/moniquegstevens/" target="_blank" class="btn btn-primary">Connect on LinkedIn ↗</a>
       <a href="#work" class="btn btn-outline">See my work</a>
@@ -443,7 +529,7 @@
 
   <div class="stats-row">
     <div class="stat-card">
-      <div class="stat-number">5<span>+</span></div>
+      <div class="stat-number">4<span>+</span></div>
       <div class="stat-label">Years of full-cycle recruiting experience</div>
     </div>
     <div class="stat-card">
@@ -451,8 +537,8 @@
       <div class="stat-label">Countries traveled solo, because connecting with anyone anywhere is kind of my thing</div>
     </div>
     <div class="stat-card">
-      <div class="stat-number">40<span>+</span></div>
-      <div class="stat-label">Average weekly phone screens at peak recruiting volume</div>
+      <div class="stat-number">20<span>+</span></div>
+      <div class="stat-label">Open requisitions managed simultaneously at peak volume</div>
     </div>
     <div class="stat-card">
       <div class="stat-number"><span>$</span>500k</div>
@@ -460,7 +546,7 @@
     </div>
     <div class="stat-card">
       <div class="stat-number">20<span>%</span></div>
-      <div class="stat-label">Time-to-hire reduction achieved at Motorola</div>
+      <div class="stat-label">Time-to-hire reduction achieved at two separate organizations</div>
     </div>
     <div class="stat-card">
       <div class="stat-number">99<span>%</span></div>
@@ -581,29 +667,29 @@
       </div>
     </div>
 
-    <div class="case-card">
-      <span class="case-tag">Self-Advocacy & Business Case Building</span>
-      <h3>The time I built a formal proposal for myself</h3>
-      <p>After 17 months of quietly taking on more and more, I decided to stop hinting and start documenting. I put together a formal reclassification proposal for my manager that laid out exactly what I had been doing, why it went well beyond my title, and what the market said about the value of that work. It was not a conversation I was used to having, but I knew the only way to be taken seriously was to show up with data, not just feelings.</p>
-      <p style="margin-top: 1rem;">I pulled median compensation benchmarks across three cities, each chosen intentionally: where the company was headquartered, where I had originally been hired, and the city I had relocated to. That framing made the data harder to dismiss. I built a side-by-side comparison showing my actual pay against market rate for each of the three functions I was covering, and laid out a two-phase step plan that gave the company a fiscally responsible path to get to the right number. I framed the whole thing around business impact, not personal frustration. The cost savings of covering multiple roles, the asset protection from my onboarding system, the strategic data I was providing leadership every week. The proposal was well received and opened a real conversation. I learned that I can make a compelling, professional case for anything when I have the right data behind it.</p>
-      <div class="case-results">
-        <span class="result-pill">3-city compensation benchmarking</span>
-        <span class="result-pill">3 job functions documented and valued</span>
-        <span class="result-pill">Two-phase step plan proposed</span>
-        <span class="result-pill">Business impact framing throughout</span>
-      </div>
-      <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
-        <p style="font-size: 13px; font-weight: 500; color: var(--warm-mid); margin-bottom: 0.75rem; letter-spacing: 0.04em;">Skills demonstrated</p>
-        <div class="case-results">
-          <span class="result-pill">Compensation benchmarking</span>
-          <span class="result-pill">Business case development</span>
-          <span class="result-pill">Data-driven storytelling</span>
-          <span class="result-pill">Executive communication</span>
-          <span class="result-pill">Professional self-advocacy</span>
-        </div>
-      </div>
     </div>
 
+  </div>
+</section>
+
+<hr class="divider">
+
+<section id="decks" class="fade-in">
+  <p class="section-label">Featured Work</p>
+  <h2 class="section-title">See it in action.</h2>
+  <p class="section-subtitle">A deep dive into my work at Motorola Solutions, the searches I owned, the results I delivered, and how I approach every stage of a search.</p>
+
+  <div class="deck-section">
+    <div class="deck-card">
+      <div class="deck-card-left">
+        <span class="deck-tag">Presentation Deck</span>
+        <h3>My work at Motorola Solutions</h3>
+        <p>Full-cycle technical and GTM recruiting across a Fortune 500 organization spanning the U.S., Canada, Mexico, Europe, and EMEA. Includes the Google SRE close, my sourcing approach, metrics, and how I follow through from offer to Day 90.</p>
+      </div>
+      <div class="deck-card-right">
+        <a href="https://moniquegstevens.github.io/Mo_Stevens_Motorola_Deck.html" target="_blank" class="btn btn-accent">View Deck ↗</a>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -642,11 +728,11 @@
       <p class="skill-group-title">Tools & Systems</p>
       <ul class="skill-list">
         <li>Excel (VLOOKUP, XLOOKUP, Power Query)</li>
-        <li>Workday ATS</li>
-        <li>Dayforce / HRIS systems</li>
+        <li>Dayforce ATS (Uniti)</li>
+        <li>Workday ATS & CRM (Motorola, STS, City Year)</li>
+        <li>Greenhouse ATS (Motorola)</li>
+        <li>LinkedIn Recruiter</li>
         <li>Microsoft Teams & Outlook</li>
-        <li>Ticketing & req management</li>
-        <li>Background check platforms</li>
       </ul>
     </div>
     <div class="skill-group">
@@ -658,6 +744,7 @@
         <li>Confidentiality & discretion</li>
         <li>High-volume multitasking</li>
         <li>Data storytelling</li>
+        <li>Being a sponge , flexibility and genuine curiosity to learn new industries, tools, and environments is what carries you further than technical skills alone</li>
       </ul>
     </div>
   </div>
@@ -668,11 +755,11 @@
 <section id="experience" class="fade-in">
   <p class="section-label">Experience</p>
   <h2 class="section-title">The full story.</h2>
-  <p class="section-subtitle">Five years of building relationships, closing searches, fixing processes, and learning something new at every stop.</p>
+  <p class="section-subtitle">Four years of building relationships, closing searches, fixing processes, and learning something new at every stop.</p>
 
   <div class="experience-list">
     <div class="exp-item">
-      <div class="exp-date">Sep 2024 — Present<br><span style="font-size:12px;color:var(--accent);">1 yr 6 mos</span></div>
+      <div class="exp-date">Sep 2024 , Present<br><span style="font-size:12px;color:var(--accent);">1 yr 6 mos</span></div>
       <div>
         <p class="exp-role">TA Advisor / HR Operations</p>
         <p class="exp-company">Current Company, Milwaukee WI (Remote)</p>
@@ -681,7 +768,7 @@
     </div>
 
     <div class="exp-item">
-      <div class="exp-date">Nov 2023 — Aug 2024<br><span style="font-size:12px;color:var(--accent);">10 mos</span></div>
+      <div class="exp-date">Sep 2023 , Sep 2024<br><span style="font-size:12px;color:var(--accent);">1 yr</span></div>
       <div>
         <p class="exp-role">Intentional Career Sabbatical</p>
         <p class="exp-company">9 Countries, Solo</p>
@@ -690,16 +777,16 @@
     </div>
 
     <div class="exp-item">
-      <div class="exp-date">May 2022 — Nov 2023<br><span style="font-size:12px;color:var(--accent);">1 yr 5 mos</span></div>
+      <div class="exp-date">May 2022 , Sep 2023<br><span style="font-size:12px;color:var(--accent);">1 yr 4 mos</span></div>
       <div>
         <p class="exp-role">Global Technical Recruiter + Internship Program Lead (Contract)</p>
         <p class="exp-company">Motorola Solutions, Chicago IL (Hybrid)</p>
-        <p class="exp-desc">Full-cycle technical recruiting across the U.S. and EMEA for Software Engineering, Cloud Infrastructure, IT Program Management, and HR functions. Averaged 30+ phone screens per week and consistently delivered 5+ monthly hires for complex global roles. Decreased time-to-hire by 20% within one month through strategic intake calls. Also owned the Global Internship Program, managing 40+ weekly screens and securing 10+ monthly hires across Software Engineering, Data Science, and Cybersecurity. Closed a 3-person Google SRE hire using a 4-year clawback structure I originated, with packages up to $500k base and $200k sign-on.</p>
+        <p class="exp-desc">Full-cycle technical recruiting across the U.S., Canada, Mexico, Europe, and EMEA for Software Engineering, Cloud Infrastructure, IT Program Management, and HR functions. Managed 10 to 20 open requisitions at any given time and consistently delivered hires for complex global roles. Decreased time-to-hire by 20% through strategic intake calls. Also owned the Global Internship Program across Software Engineering, Data Science, and Cybersecurity. Closed a 3-person Google SRE hire using a 4-year clawback structure I originated, with packages up to $500k base and $200k sign-on.</p>
       </div>
     </div>
 
     <div class="exp-item">
-      <div class="exp-date">Feb 2021 — May 2022<br><span style="font-size:12px;color:var(--accent);">1 yr 4 mos</span></div>
+      <div class="exp-date">Feb 2021 , May 2022<br><span style="font-size:12px;color:var(--accent);">1 yr 4 mos</span></div>
       <div>
         <p class="exp-role">Recruiter, promoted to RPO Lead (Contract)</p>
         <p class="exp-company">STS Technical Services (Remote)</p>
@@ -708,10 +795,10 @@
     </div>
 
     <div class="exp-item">
-      <div class="exp-date">May 2017 — May 2018<br><span style="font-size:12px;color:var(--accent);">1 yr 1 mo</span></div>
+      <div class="exp-date">May 2017 , May 2018<br><span style="font-size:12px;color:var(--accent);">1 yr 1 mo</span></div>
       <div>
         <p class="exp-role">AmeriCorps Member, Staff Recruiting</p>
-        <p class="exp-company">City Year, Milwaukee WI</p>
+        <p class="exp-company">City Year, Milwaukee WI &nbsp;·&nbsp; <span style="color:var(--warm-mid);font-size:13px;">AmeriCorps service year</span></p>
         <p class="exp-desc">This is where it all started, honestly. I partnered with the office team to source and interview AmeriCorps prospects via phone and video, and managed end-to-end onboarding and offboarding in Workday. I also helped plan and execute three school-wide events for 350+ students that improved school culture and secured funding through the Brewers Community Foundation. And I built custom Excel tracking systems to mentor 12+ students weekly on academic and social-emotional goals, reporting progress directly to leadership. Looking back, the recruiting, the data systems, the event coordination, and the relationship building were all there from day one.</p>
       </div>
     </div>
@@ -733,12 +820,16 @@
   <div class="contact-block">
     <h2>Let's connect!</h2>
     <p>I am open to senior TA, HR ops, and consulting opportunities. I love a good problem to solve and an even better team to solve it with.</p>
-    <a href="https://www.linkedin.com/in/moniquegstevens/" target="_blank" class="btn btn-primary">Find me on LinkedIn ↗</a>
+    <div class="contact-links">
+      <a href="https://www.linkedin.com/in/moniquegstevens/" target="_blank" class="btn btn-accent">Find me on LinkedIn ↗</a>
+      <a href="mailto:moniquegstevens@gmail.com" class="btn-outline-light">moniquegstevens@gmail.com</a>
+      <a href="tel:2629607991" class="btn-outline-light">262-960-7991</a>
+    </div>
   </div>
 </section>
 
 <footer>
-  Monique Stevens &nbsp;·&nbsp; Milwaukee, WI &nbsp;·&nbsp; <a href="https://www.linkedin.com/in/moniquegstevens/" target="_blank" style="color: var(--accent);">linkedin.com/in/moniquegstevens</a>
+  Monique Stevens &nbsp;·&nbsp; Milwaukee, WI &nbsp;·&nbsp; 262-960-7991 &nbsp;·&nbsp; <a href="mailto:moniquegstevens@gmail.com" style="color: var(--accent);">moniquegstevens@gmail.com</a> &nbsp;·&nbsp; <a href="https://www.linkedin.com/in/moniquegstevens/" target="_blank" style="color: var(--accent);">linkedin.com/in/moniquegstevens</a>
 </footer>
 
 <script>
