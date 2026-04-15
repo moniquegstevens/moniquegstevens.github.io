@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mo Stevens , Uniti Group</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  :root{
+    --u-teal:#00857A;--u-dark:#0A1F1C;--u-darker:#050F0D;
+    --u-bright:#00B5A6;--u-accent:#4DD9CC;
+    --u-white:#FFFFFF;--u-light:#EEF9F8;
+    --u-text:#0D1C1A;--u-gray:#5A706E;
+    --fd:'Playfair Display',serif;--fb:'DM Sans',sans-serif;
+  }
+  html{scroll-behavior:smooth;}
+  body{font-family:var(--fb);background:var(--u-white);color:var(--u-text);overflow-x:hidden;}
+  .nav-dots{position:fixed;right:28px;top:50%;transform:translateY(-50%);z-index:100;display:flex;flex-direction:column;gap:12px;}
+  .nav-dot{width:8px;height:8px;border-radius:50%;background:rgba(0,133,122,0.25);cursor:pointer;transition:all 0.3s;border:none;}
+  .nav-dot.active,.nav-dot:hover{background:var(--u-teal);transform:scale(1.5);}
+  .slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:60px 80px;position:relative;overflow:hidden;}
+
+  .slide-hero{background:var(--u-darker);color:white;}
+  .slide-hero::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(0,133,122,0.08) 1px,transparent 1px);background-size:44px 44px;pointer-events:none;}
+  .slide-hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--u-teal),var(--u-accent));}
+
+  .hero-tag{display:inline-block;background:rgba(0,133,122,0.2);border:1px solid rgba(0,133,122,0.5);color:var(--u-accent);font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;padding:8px 18px;border-radius:100px;margin-bottom:32px;animation:fadeUp 0.8s ease both;}
+  .hero-name{font-family:var(--fd);font-size:clamp(48px,7vw,92px);font-weight:900;line-height:1;margin-bottom:16px;color:white;animation:fadeUp 0.8s 0.1s ease both;}
+  .hero-name span{color:var(--u-accent);}
+  .hero-title{font-size:clamp(15px,2vw,21px);font-weight:300;color:rgba(255,255,255,0.7);margin-bottom:48px;animation:fadeUp 0.8s 0.2s ease both;}
+  .hero-cta{display:flex;gap:20px;flex-wrap:wrap;animation:fadeUp 0.8s 0.3s ease both;}
+  .btn-teal{background:var(--u-teal);color:white;padding:14px 32px;border-radius:6px;font-weight:700;font-size:15px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:transform 0.2s,box-shadow 0.2s;}
+  .btn-teal:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(0,133,122,0.5);}
+  .btn-ghost{border:1px solid rgba(255,255,255,0.35);color:white;padding:14px 32px;border-radius:6px;font-weight:500;font-size:15px;text-decoration:none;transition:all 0.2s;}
+  .btn-ghost:hover{background:rgba(255,255,255,0.08);}
+  .hero-stats{position:absolute;right:80px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:20px;animation:fadeLeft 0.8s 0.4s ease both;}
+  .stat-card{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:14px;padding:22px 28px;text-align:center;min-width:150px;}
+  .stat-number{font-family:var(--fd);font-size:38px;font-weight:700;color:var(--u-accent);line-height:1;margin-bottom:6px;}
+  .stat-label{font-size:11px;font-weight:500;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:1.5px;}
+
+  .slide-light{background:var(--u-white);}
+  .slide-off{background:var(--u-light);}
+  .slide-dark{background:var(--u-darker);color:white;}
+
+  .slide-label{font-size:11px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:var(--u-teal);margin-bottom:16px;opacity:0;animation:fadeUp 0.6s ease forwards;}
+  .slide-label.light{color:var(--u-accent);}
+  .slide-heading{font-family:var(--fd);font-size:clamp(32px,4.5vw,58px);font-weight:700;line-height:1.1;margin-bottom:40px;opacity:0;animation:fadeUp 0.6s 0.1s ease forwards;}
+  .slide-heading.light{color:white;}
+  .divider{width:50px;height:3px;background:linear-gradient(90deg,var(--u-teal),var(--u-accent));border-radius:2px;margin-bottom:28px;opacity:0;animation:fadeUp 0.6s 0.05s ease forwards;}
+  .slide-num{position:absolute;bottom:40px;left:80px;font-size:12px;color:rgba(0,133,122,0.3);letter-spacing:2px;}
+  .slide-num.light{color:rgba(255,255,255,0.25);}
+
+  .stat-strip{display:flex;gap:28px;margin-bottom:40px;opacity:0;animation:fadeUp 0.6s 0.15s ease forwards;flex-wrap:wrap;}
+  .u-stat{display:flex;flex-direction:column;gap:4px;}
+  .u-stat strong{font-family:var(--fd);font-size:26px;font-weight:700;color:var(--u-teal);}
+  .u-stat span{font-size:11px;color:var(--u-gray);text-transform:uppercase;letter-spacing:1px;}
+
+  .why-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;opacity:0;animation:fadeUp 0.6s 0.2s ease forwards;}
+  .why-card{background:var(--u-white);border:1px solid #C5E8E5;border-radius:16px;padding:28px;position:relative;overflow:hidden;transition:transform 0.3s,box-shadow 0.3s;box-shadow:0 2px 8px rgba(0,133,122,0.06);}
+  .why-card:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(0,133,122,0.12);}
+  .why-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--u-teal),var(--u-accent));}
+  .why-icon{font-size:28px;margin-bottom:14px;}
+  .why-card h3{font-family:var(--fd);font-size:19px;font-weight:700;margin-bottom:10px;color:var(--u-text);}
+  .why-card p{font-size:14px;line-height:1.7;color:var(--u-gray);}
+
+  .bring-layout{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start;opacity:0;animation:fadeUp 0.6s 0.2s ease forwards;}
+  .metric-list{display:flex;flex-direction:column;gap:14px;}
+  .metric-item{display:flex;align-items:flex-start;gap:18px;padding:16px 20px;background:var(--u-white);border-radius:12px;border:1px solid #C5E8E5;box-shadow:0 2px 5px rgba(0,133,122,0.05);transition:all 0.3s;}
+  .metric-item:hover{border-color:var(--u-teal);box-shadow:0 6px 18px rgba(0,133,122,0.1);}
+  .metric-num{font-family:var(--fd);font-size:26px;font-weight:700;color:var(--u-teal);min-width:68px;text-align:center;flex-shrink:0;}
+  .metric-text strong{display:block;font-size:13px;font-weight:600;margin-bottom:3px;color:var(--u-text);}
+  .metric-text span{font-size:12px;color:var(--u-gray);line-height:1.5;}
+  .story-block{display:flex;flex-direction:column;gap:16px;}
+  .story-item{padding:20px;border-radius:14px;border-left:3px solid var(--u-teal);background:var(--u-light);}
+  .story-item h4{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--u-teal);margin-bottom:7px;}
+  .story-item p{font-size:13px;line-height:1.7;color:#444;}
+
+  .plan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;opacity:0;animation:fadeUp 0.6s 0.2s ease forwards;}
+  .plan-card{border-radius:18px;padding:26px;}
+  .plan-card-1{background:var(--u-white);border:1px solid #C5E8E5;box-shadow:0 2px 6px rgba(0,133,122,0.06);}
+  .plan-card-2{background:var(--u-teal);color:white;}
+  .plan-card-3{background:var(--u-darker);color:white;}
+  .plan-day{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;opacity:0.55;margin-bottom:7px;}
+  .plan-title{font-family:var(--fd);font-size:24px;font-weight:700;margin-bottom:18px;}
+  .plan-items{list-style:none;display:flex;flex-direction:column;gap:9px;}
+  .plan-items li{display:flex;align-items:flex-start;gap:9px;font-size:12px;line-height:1.5;}
+  .plan-card-1 .plan-items li{color:#444;}
+  .plan-card-2 .plan-items li,.plan-card-3 .plan-items li{color:rgba(255,255,255,0.82);}
+  .plan-items li::before{content:'→';font-weight:700;flex-shrink:0;}
+  .plan-card-1 .plan-items li::before{color:var(--u-teal);}
+  .plan-card-2 .plan-items li::before,.plan-card-3 .plan-items li::before{color:var(--u-accent);}
+
+  .slide-close{background:var(--u-darker);color:white;text-align:center;align-items:center;}
+  .slide-close::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(0,133,122,0.06) 1px,transparent 1px);background-size:44px 44px;pointer-events:none;}
+  .close-content{max-width:720px;opacity:0;animation:fadeUp 0.6s 0.1s ease forwards;}
+  .close-headline{font-family:var(--fd);font-size:clamp(28px,4vw,52px);font-weight:900;line-height:1.15;margin-bottom:24px;color:white;}
+  .close-headline span{color:var(--u-accent);}
+  .values-strip{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:32px;}
+  .value-pill{background:rgba(0,133,122,0.2);border:1px solid rgba(0,133,122,0.5);border-radius:100px;padding:7px 16px;font-size:12px;font-weight:600;color:var(--u-accent);}
+  .climate-block{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:18px;padding:26px 30px;margin-bottom:32px;text-align:left;}
+  .climate-block p{font-size:14px;line-height:1.85;color:rgba(255,255,255,0.8);}
+  .climate-block p+p{margin-top:12px;}
+  .close-contact{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin-bottom:32px;}
+  .contact-item{display:flex;align-items:center;gap:9px;font-size:13px;color:rgba(255,255,255,0.65);text-decoration:none;transition:color 0.2s;}
+  .contact-item:hover{color:var(--u-accent);}
+  .contact-icon{width:32px;height:32px;border-radius:7px;background:rgba(0,133,122,0.2);display:flex;align-items:center;justify-content:center;font-size:14px;}
+  .close-final{font-family:var(--fd);font-size:17px;font-weight:700;font-style:italic;color:rgba(255,255,255,0.3);}
+
+  @keyframes fadeUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
+  @keyframes fadeLeft{from{opacity:0;transform:translateX(28px);}to{opacity:1;transform:translateX(0);}}
+  @media(max-width:900px){.slide{padding:48px 32px;}.hero-stats{display:none;}.why-grid,.bring-layout,.plan-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<nav class="nav-dots">
+  <button class="nav-dot active" onclick="scrollToSlide(0)"></button>
+  <button class="nav-dot" onclick="scrollToSlide(1)"></button>
+  <button class="nav-dot" onclick="scrollToSlide(2)"></button>
+  <button class="nav-dot" onclick="scrollToSlide(3)"></button>
+  <button class="nav-dot" onclick="scrollToSlide(4)"></button>
+  <button class="nav-dot" onclick="scrollToSlide(5)"></button>
+</nav>
+
+<!-- SLIDE 1 -->
+<section class="slide slide-hero" id="slide-0">
+  <div>
+    <div class="hero-tag">Senior Recruiter / TA Advisor , Uniti Group</div>
+    <h1 class="hero-name">Monique<br><span>"Mo"</span> Stevens</h1>
+    <p class="hero-title">Full-Cycle Recruiting &nbsp;·&nbsp; GTM, Sales & Corporate &nbsp;·&nbsp; Nationwide Fiber Infrastructure</p>
+    <div class="hero-cta">
+      <a href="mailto:moniquegstevens@gmail.com" class="btn-teal">📬 moniquegstevens@gmail.com</a>
+      <a href="https://linkedin.com/in/moniquegstevens" class="btn-ghost" target="_blank">LinkedIn ↗</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-card"><div class="stat-number">98%</div><div class="stat-label">HM Satisfaction</div></div>
+    <div class="stat-card"><div class="stat-number">20%</div><div class="stat-label">Time-to-Fill Down</div></div>
+    <div class="stat-card"><div class="stat-number">10-20</div><div class="stat-label">Open Reqs at Once</div></div>
+  </div>
+  <div class="slide-num light">01 / 06</div>
+</section>
+
+<!-- SLIDE 2 -->
+<section class="slide slide-off" id="slide-1">
+  <div class="slide-label">The Role</div>
+  <h2 class="slide-heading">What I Do at Uniti.</h2>
+  <div class="divider"></div>
+  <div class="stat-strip">
+    <div class="u-stat"><strong>217K+</strong><span>Route Miles of Fiber</span></div>
+    <div class="u-stat"><strong>47 States</strong><span>Network Reach</span></div>
+    <div class="u-stat"><strong>6 Teams</strong><span>HMs Supported</span></div>
+    <div class="u-stat"><strong>10-20</strong><span>Open Reqs at Once</span></div>
+    <div class="u-stat"><strong>Dayforce</strong><span>ATS</span></div>
+  </div>
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="why-icon">🔗</div>
+      <h3>Full-Cycle GTM & Corporate Recruiting</h3>
+      <p>Own end-to-end recruiting for Sales, Customer Success, Operations, and Corporate functions partnering with VP and Director level hiring managers from intake through offer negotiation and close.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">🤝</div>
+      <h3>Candidate & HM Touch Points</h3>
+      <p>Maintain proactive check-ins with both candidates and hiring managers every few days throughout every search. Follow up with new hires at week one, 30, 60, and 90 days. The search is not done until they stay.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">📊</div>
+      <h3>Data-Driven Process</h3>
+      <p>Track and report on pipeline conversion rates, pass-through rates, time-to-fill, and offer acceptance weekly. Use data to diagnose pipeline risks early and communicate tradeoffs clearly to hiring managers.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">🏗️</div>
+      <h3>Infrastructure Built to Last</h3>
+      <p>Standardized the intake process across all requisitions. Built a cross-functional onboarding dashboard maintained every afternoon in an Agile environment, pushing real-time updates to all departments on any rescind, start date change, or candidate drop. Sole owner of all req creation for the company. Decreased time-to-fill by 20% through process improvements that actually stuck.</p>
+    </div>
+  </div>
+  <div class="slide-num">02 / 06</div>
+</section>
+
+<!-- SLIDE 3 -->
+<section class="slide slide-light" id="slide-2">
+  <div class="slide-label">Track Record</div>
+  <h2 class="slide-heading">What I Delivered.</h2>
+  <div class="divider"></div>
+  <div class="bring-layout">
+    <div class="metric-list">
+      <div class="metric-item">
+        <div class="metric-num">98%</div>
+        <div class="metric-text"><strong>Hiring Manager Satisfaction</strong><span>Across 6 teams including VP and Director level leaders who came back every single search</span></div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-num">20%</div>
+        <div class="metric-text"><strong>Time-to-Fill Reduction</strong><span>Achieved through structured intake frameworks and data-driven process improvements</span></div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-num">90%+</div>
+        <div class="metric-text"><strong>Offer Acceptance Rate</strong><span>Across all GTM, Sales, Customer Success, and Corporate searches nationwide</span></div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-num">100%</div>
+        <div class="metric-text"><strong>Day 1 Readiness</strong><span>Built a cross-functional onboarding dashboard for 50 or more weekly new hires. Day 1 issues dropped from roughly 50% to zero in two weeks.</span></div>
+      </div>
+    </div>
+    <div class="story-block">
+      <div class="story-item">
+        <h4>Onboarding Dashboard</h4>
+        <p>During orientation I kept hearing the same issues from new hires around equipment not arriving, system access not being set up, and scheduling conflicts. I built a unified dashboard connecting the heads of IT, L&D, HR, and Finance to fix the root problem. Maintained every afternoon with real-time updates. In our Agile environment, any rescind, start date change, or candidate drop was pushed to all departments immediately with confirmation required. Day 1 issues dropped to zero within two weeks.</p>
+      </div>
+      <div class="story-item">
+        <h4>Exit Interview Program</h4>
+        <p>I noticed the same names cycling through resignations and new reqs on the sales team. I volunteered to run exit interviews, identified the root causes, documented everything, and brought a full summary to the VP of HR and Director of Recruiting. The program now directly shapes the company's sales retention strategy.</p>
+      </div>
+      <div class="story-item">
+        <h4>Requisition Creation and Governance</h4>
+        <p>I am the sole owner of all requisition creation at Uniti. Every req flows through me before a recruiter ever sees it. I verify pay ranges, confirm union status, validate locations, consult the approval matrix, build the req, and route it. I manage the Mass Req Tracker for multiple managers and handled 650 or more req requests in a single month post-merger.</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">03 / 06</div>
+</section>
+
+<!-- SLIDE 4 -->
+<section class="slide slide-dark" id="slide-3">
+  <div class="slide-label light">Signature Story</div>
+  <div style="max-width:800px;opacity:0;animation:fadeUp 0.6s 0.2s ease forwards;">
+    <h2 class="slide-heading light">The Onboarding System<br>I Built Because I Couldn't<br>Let It Stay Broken.</h2>
+    <div class="divider"></div>
+    <p style="font-family:var(--fd);font-size:clamp(18px,2.2vw,26px);font-weight:700;line-height:1.5;margin-bottom:36px;color:white;">New hires were showing up on Day 1 without laptops, login credentials, or a point of contact.<br><span style="color:var(--u-accent);font-style:normal;">I fixed it in two weeks and it has not broken since.</span></p>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:36px;">
+      <div style="text-align:center;padding:24px 16px;background:rgba(255,255,255,0.08);border-radius:14px;border:1px solid rgba(255,255,255,0.15);">
+        <div style="font-size:32px;margin-bottom:10px;">🔍</div>
+        <h4 style="font-size:14px;font-weight:700;margin-bottom:7px;color:white;">The Problem</h4>
+        <p style="font-size:12px;color:rgba(255,255,255,0.6);line-height:1.6;">Six teams operating in silos. No one owned the handoff. New hires paying the price every Monday.</p>
+      </div>
+      <div style="text-align:center;padding:24px 16px;background:rgba(255,255,255,0.08);border-radius:14px;border:1px solid rgba(255,255,255,0.15);">
+        <div style="font-size:32px;margin-bottom:10px;">💡</div>
+        <h4 style="font-size:14px;font-weight:700;margin-bottom:7px;color:white;">The Solution</h4>
+        <p style="font-size:12px;color:rgba(255,255,255,0.6);line-height:1.6;">A master Excel dashboard using Power Query, auto-refreshing from Dayforce daily. Every team accountable. Thursday 2pm sync as the hard cutoff.</p>
+      </div>
+      <div style="text-align:center;padding:24px 16px;background:rgba(255,255,255,0.08);border-radius:14px;border:1px solid rgba(255,255,255,0.15);">
+        <div style="font-size:32px;margin-bottom:10px;">✅</div>
+        <h4 style="font-size:14px;font-weight:700;margin-bottom:7px;color:white;">The Result</h4>
+        <p style="font-size:12px;color:rgba(255,255,255,0.6);line-height:1.6;">99% Day 1 success rate. Issues that once affected the majority of new hires became rare. Budget and leadership have full read-only visibility at all times.</p>
+      </div>
+    </div>
+    <div style="background:rgba(77,217,204,0.12);border:1px solid rgba(77,217,204,0.3);border-radius:14px;padding:24px 28px;font-size:15px;line-height:1.8;color:rgba(255,255,255,0.9);font-style:italic;">
+      "I did not wait to be asked. I saw the problem during orientation, mapped the gaps myself, built the system, and required accountability from every team involved. That is how I operate."
+    </div>
+  </div>
+  <div class="slide-num light">04 / 06</div>
+</section>
+
+<!-- SLIDE 5 -->
+<section class="slide slide-off" id="slide-4">
+  <div class="slide-label">My Approach</div>
+  <h2 class="slide-heading">How I Work.</h2>
+  <div class="divider"></div>
+  <div class="plan-grid">
+    <div class="plan-card plan-card-1">
+      <div class="plan-day" style="color:#888">Before I Source</div>
+      <div class="plan-title" style="color:var(--u-text)">Understand</div>
+      <ul class="plan-items">
+        <li>Run a structured intake with every hiring manager before touching the market</li>
+        <li>Define what great actually looks like for this specific team and this specific moment</li>
+        <li>Research the talent landscape and compensation benchmarks before posting</li>
+        <li>Set honest expectations on timeline, availability, and tradeoffs upfront</li>
+        <li>Identify the real blockers before they become offer killers</li>
+      </ul>
+    </div>
+    <div class="plan-card plan-card-2">
+      <div class="plan-day">While I Search</div>
+      <div class="plan-title">Stay Connected</div>
+      <ul class="plan-items">
+        <li>Check in with both the candidate and hiring manager every few days throughout the process</li>
+        <li>Build outbound passive pipelines using LinkedIn Recruiter and Boolean search</li>
+        <li>Report weekly on pipeline health, conversion rates, and market data</li>
+        <li>Surface concerns early before they become surprises at the offer stage</li>
+        <li>Maintain data integrity in Dayforce across all active searches at all times</li>
+      </ul>
+    </div>
+    <div class="plan-card plan-card-3">
+      <div class="plan-day">After the Close</div>
+      <div class="plan-title">Follow Through</div>
+      <ul class="plan-items">
+        <li>Walk every finalist through the offer before it lands in their inbox</li>
+        <li>Check in with both the new hire and hiring manager at week one</li>
+        <li>Follow up again at 30, 60, and 90 days to confirm the transition is on track</li>
+        <li>Surface any early concerns before they become retention problems</li>
+        <li>The search is not done until they stay</li>
+      </ul>
+    </div>
+  </div>
+  <div class="slide-num">05 / 06</div>
+</section>
+
+<!-- SLIDE 6 -->
+<section class="slide slide-close" id="slide-5">
+  <div class="close-content">
+    <div class="slide-label light" style="text-align:center;">Who I Am</div>
+    <h2 class="close-headline">
+      I absorb confusion<br>and produce clarity.<br>
+      <span>For every req. Every time.</span>
+    </h2>
+    <div class="values-strip">
+      <span class="value-pill">Full-Cycle Ownership</span>
+      <span class="value-pill">Process Builder</span>
+      <span class="value-pill">90-Day Follow Through</span>
+      <span class="value-pill">98% HM Satisfaction</span>
+    </div>
+    <div class="climate-block">
+      <p>Someone once asked me why I am still in recruiting when so many people move on after a few years. I think about it like climate versus weather. Weather changes constantly. Some days in recruiting are exhausting, frustrating, slow. But climate is the consistent state underneath all of that. My climate is a genuine appreciation for this work and what it produces for people on both sides of the table.</p>
+      <p>My superpower is being the bridge. Between what a hiring manager needs and what the market can actually deliver. Between a candidate's ask and what a company can do. Between a broken process and one that actually works. That is what I showed up to do at Uniti every day.</p>
+    </div>
+    <div class="close-contact">
+      <a href="mailto:moniquegstevens@gmail.com" class="contact-item"><span class="contact-icon">📬</span>moniquegstevens@gmail.com</a>
+      <a href="tel:2629607991" class="contact-item"><span class="contact-icon">📞</span>262-960-7991</a>
+      <a href="https://linkedin.com/in/moniquegstevens" target="_blank" class="contact-item"><span class="contact-icon">💼</span>linkedin.com/in/moniquegstevens</a>
+      <a href="https://moniquegstevens.github.io" target="_blank" class="contact-item"><span class="contact-icon">🌐</span>moniquegstevens.github.io</a>
+    </div>
+    <div class="close-final">"My superpower is being the bridge."</div>
+  </div>
+  <div class="slide-num light">06 / 06</div>
+</section>
+
+<script>
+  const slides=document.querySelectorAll('.slide');
+  const dots=document.querySelectorAll('.nav-dot');
+  function scrollToSlide(i){slides[i].scrollIntoView({behavior:'smooth'});}
+  const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){const i=Array.from(slides).indexOf(e.target);dots.forEach(d=>d.classList.remove('active'));if(dots[i])dots[i].classList.add('active');}});},{threshold:0.4});
+  slides.forEach(s=>obs.observe(s));
+</script>
+</body>
+</html>
