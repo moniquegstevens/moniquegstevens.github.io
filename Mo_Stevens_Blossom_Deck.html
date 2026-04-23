@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mo Stevens - Blossom Health</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--dark:#0D1F0F;--green:#1B4D2E;--accent:#52B788;--pale:#B7E4C7;--cream:#F8FBF8;--white:#FFFFFF;--text:#0D1F0F;--gray:#4A5E4D;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--text);overflow-x:hidden;}
+.dots{position:fixed;right:26px;top:50%;transform:translateY(-50%);z-index:100;display:flex;flex-direction:column;gap:11px;}
+.dot{width:8px;height:8px;border-radius:50%;background:rgba(82,183,136,0.28);cursor:pointer;transition:all 0.3s;border:none;}
+.dot.on,.dot:hover{background:var(--accent);transform:scale(1.5);}
+.s{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:60px 80px;position:relative;overflow:hidden;}
+.s-dark{background:var(--dark);color:white;}
+.s-dark::before,.s-green::before{content:"";position:absolute;inset:0;background-image:radial-gradient(circle,rgba(82,183,136,0.06) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;}
+.s-green{background:var(--green);color:white;}
+.s-cream{background:var(--cream);}
+.s-white{background:var(--white);}
+.tag{display:inline-block;background:rgba(82,183,136,0.18);border:1px solid rgba(82,183,136,0.5);color:var(--pale);font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;padding:8px 18px;border-radius:100px;margin-bottom:28px;}
+.tag-d{color:var(--accent);background:rgba(82,183,136,0.1);border-color:rgba(82,183,136,0.3);}
+.bigname{font-family:"Playfair Display",serif;font-size:clamp(44px,7vw,86px);font-weight:900;line-height:1;margin-bottom:14px;}
+.bigname span{color:var(--accent);}
+.sub{font-size:clamp(14px,1.8vw,18px);font-weight:300;color:rgba(255,255,255,0.58);margin-bottom:44px;}
+.btns{display:flex;gap:14px;flex-wrap:wrap;}
+.b1{background:var(--accent);color:white;padding:12px 28px;border-radius:6px;font-weight:700;font-size:14px;text-decoration:none;transition:all 0.2s;}
+.b1:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(82,183,136,0.38);}
+.b2{border:1px solid rgba(255,255,255,0.28);color:white;padding:12px 28px;border-radius:6px;font-weight:500;font-size:14px;text-decoration:none;transition:all 0.2s;}
+.b2:hover{background:rgba(255,255,255,0.07);}
+.hstats{position:absolute;right:78px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:15px;}
+.hs{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:13px;padding:17px 22px;text-align:center;min-width:128px;}
+.hs-n{font-family:"Playfair Display",serif;font-size:32px;font-weight:700;color:var(--accent);line-height:1;margin-bottom:5px;}
+.hs-l{font-size:10px;font-weight:600;color:rgba(255,255,255,0.38);text-transform:uppercase;letter-spacing:1.5px;}
+.pg{position:absolute;bottom:34px;left:78px;font-size:11px;letter-spacing:2px;}
+.pg-d{color:rgba(255,255,255,0.18);}
+.pg-l{color:rgba(82,183,136,0.28);}
+.lbl{font-size:11px;font-weight:700;letter-spacing:4px;text-transform:uppercase;margin-bottom:13px;}
+.lbl-g{color:var(--pale);}
+.lbl-d{color:var(--accent);}
+.h2{font-family:"Playfair Display",serif;font-size:clamp(26px,4vw,50px);font-weight:700;line-height:1.1;margin-bottom:28px;}
+.bar{width:44px;height:3px;background:linear-gradient(90deg,var(--accent),var(--pale));border-radius:2px;margin-bottom:24px;}
+.stmt{font-family:"Playfair Display",serif;font-size:clamp(17px,2.2vw,25px);font-weight:700;line-height:1.55;margin-bottom:26px;color:white;}
+.stmt em{color:var(--pale);font-style:normal;}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:26px;}
+.mc{padding:19px 15px;background:rgba(255,255,255,0.07);border-radius:13px;border:1px solid rgba(255,255,255,0.11);}
+.mc .ico{font-size:24px;margin-bottom:9px;}
+.mc h4{font-size:13px;font-weight:700;margin-bottom:6px;color:white;}
+.mc p{font-size:12px;color:rgba(255,255,255,0.6);line-height:1.7;}
+.qbox{background:rgba(82,183,136,0.15);border:1px solid rgba(82,183,136,0.36);border-radius:12px;padding:19px 22px;font-size:13px;line-height:1.85;color:rgba(255,255,255,0.87);font-style:italic;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:17px;}
+.wc{background:var(--white);border:1px solid #C7E9D4;border-radius:15px;padding:22px;position:relative;overflow:hidden;transition:transform 0.3s,box-shadow 0.3s;}
+.wc:hover{transform:translateY(-3px);box-shadow:0 9px 22px rgba(45,122,79,0.1);}
+.wc::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--pale));}
+.wc .ico{font-size:22px;margin-bottom:10px;}
+.wc h3{font-family:"Playfair Display",serif;font-size:16px;font-weight:700;margin-bottom:8px;}
+.wc p{font-size:12px;line-height:1.7;color:var(--gray);}
+.bring{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start;}
+.mlist{display:flex;flex-direction:column;gap:11px;}
+.mi{display:flex;align-items:flex-start;gap:13px;padding:13px 15px;background:var(--white);border-radius:10px;border:1px solid #C7E9D4;transition:all 0.3s;}
+.mi:hover{border-color:var(--accent);box-shadow:0 4px 14px rgba(82,183,136,0.09);}
+.mi-n{font-family:"Playfair Display",serif;font-size:21px;font-weight:700;color:#2D7A4F;min-width:56px;text-align:center;flex-shrink:0;}
+.mi strong{display:block;font-size:12px;font-weight:600;margin-bottom:2px;}
+.mi span{font-size:11px;color:var(--gray);line-height:1.5;}
+.slist{display:flex;flex-direction:column;gap:12px;}
+.si{padding:15px;border-radius:12px;border-left:3px solid var(--accent);background:var(--cream);}
+.si h4{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#2D7A4F;margin-bottom:5px;}
+.si p{font-size:12px;line-height:1.7;color:#3A4A3C;}
+.p3{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;}
+.pc{border-radius:15px;padding:22px;}
+.pc1{background:var(--white);border:1px solid #C7E9D4;}
+.pc2{background:var(--accent);color:white;}
+.pc3{background:var(--dark);color:white;}
+.pc-d{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;opacity:0.45;margin-bottom:6px;}
+.pc-t{font-family:"Playfair Display",serif;font-size:19px;font-weight:700;margin-bottom:13px;}
+.pc1 .pc-t{color:var(--text);}
+.pl{list-style:none;display:flex;flex-direction:column;gap:8px;}
+.pl li{display:flex;align-items:flex-start;gap:7px;font-size:11px;line-height:1.55;}
+.pc1 .pl li{color:#3A4A3C;}
+.pc2 .pl li,.pc3 .pl li{color:rgba(255,255,255,0.8);}
+.pl li::before{content:"to";font-weight:700;flex-shrink:0;font-style:italic;font-size:10px;margin-top:1px;}
+.pc1 .pl li::before{color:#2D7A4F;}
+.pc2 .pl li::before,.pc3 .pl li::before{color:var(--pale);}
+.closer{align-items:center;text-align:center;}
+.ci{max-width:700px;}
+.ch{font-family:"Playfair Display",serif;font-size:clamp(24px,4vw,46px);font-weight:900;line-height:1.15;margin-bottom:19px;color:white;}
+.ch span{color:var(--accent);}
+.pills{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:22px;}
+.pill{background:rgba(82,183,136,0.17);border:1px solid rgba(82,183,136,0.36);border-radius:100px;padding:5px 13px;font-size:11px;font-weight:600;color:var(--pale);}
+.cbox{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:15px;padding:20px 24px;margin-bottom:22px;text-align:left;}
+.cbox p{font-size:13px;line-height:1.85;color:rgba(255,255,255,0.76);}
+.cbox p+p{margin-top:10px;}
+.clinks{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-bottom:22px;}
+.cl{display:flex;align-items:center;gap:7px;font-size:12px;color:rgba(255,255,255,0.52);text-decoration:none;transition:color 0.2s;}
+.cl:hover{color:var(--accent);}
+.cl-i{width:27px;height:27px;border-radius:6px;background:rgba(82,183,136,0.17);display:flex;align-items:center;justify-content:center;font-size:12px;}
+.fin{font-family:"Playfair Display",serif;font-size:14px;font-style:italic;color:rgba(255,255,255,0.2);}
+@media(max-width:900px){.s{padding:44px 28px;}.hstats{display:none;}.g2,.bring,.g3,.p3{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<nav class="dots">
+  <button class="dot on" onclick="go(0)"></button>
+  <button class="dot" onclick="go(1)"></button>
+  <button class="dot" onclick="go(2)"></button>
+  <button class="dot" onclick="go(3)"></button>
+  <button class="dot" onclick="go(4)"></button>
+  <button class="dot" onclick="go(5)"></button>
+</nav>
+
+<section class="s s-dark" id="s0">
+  <div>
+    <div class="tag">Founding Recruiter &mdash; Blossom Health</div>
+    <h1 class="bigname">Monique<br><span>"Mo"</span> Stevens</h1>
+    <p class="sub">Full-Cycle Recruiting &middot; Technical &amp; Corporate &middot; Built From Zero &middot; Mission-Driven Mental Healthcare</p>
+    <div class="btns">
+      <a href="mailto:moniquegstevens@gmail.com" class="b1">moniquegstevens@gmail.com</a>
+      <a href="https://moniquegstevens.github.io" class="b2" target="_blank">Portfolio</a>
+    </div>
+  </div>
+  <div class="hstats">
+    <div class="hs"><div class="hs-n">98%</div><div class="hs-l">HM Satisfaction</div></div>
+    <div class="hs"><div class="hs-n">20%</div><div class="hs-l">Time-to-Fill Down</div></div>
+    <div class="hs"><div class="hs-n">99%</div><div class="hs-l">Day 1 Readiness</div></div>
+    <div class="hs"><div class="hs-n">0</div><div class="hs-l">Systems Inherited</div></div>
+  </div>
+  <div class="pg pg-d">01 / 06</div>
+</section>
+
+<section class="s s-green" id="s1">
+  <div class="lbl lbl-g">Why This Mission</div>
+  <h2 class="h2" style="color:white;max-width:680px;">Unlock your best self.<br>That is not a tagline to me.</h2>
+  <div class="bar"></div>
+  <div style="max-width:860px;">
+    <p class="stmt">I do not want to recruit for a company.<br><em>I want to recruit for a cause.</em></p>
+    <div class="g3">
+      <div class="mc"><div class="ico">🌱</div><h4>Where It Started</h4><p>I completed an AmeriCorps service year at City Year Milwaukee showing up every day for students who needed someone in their corner. Showing up for people who need care is foundational to who I am.</p></div>
+      <div class="mc"><div class="ico">💙</div><h4>Personal Connection</h4><p>I have navigated a healthcare system that did not always have answers. I understand firsthand what it feels like when access to care is the barrier, and why Blossom's mission to make psychiatric care affordable and accessible is so urgent.</p></div>
+      <div class="mc"><div class="ico">🚀</div><h4>Builder by Nature</h4><p>I started as the founding recruiter for a $2B company with zero existing infrastructure. I built every system from scratch. That is not a stretch for me. It is where I do my best work.</p></div>
+    </div>
+    <div class="qbox">"Community by community, Blossom is making quality psychiatric care possible. Every hire I make for this team is one more person who can sit across from someone struggling and help them find their way back. That is the math I want my work to produce."</div>
+  </div>
+  <div class="pg pg-d">02 / 06</div>
+</section>
+
+<section class="s s-cream" id="s2">
+  <div class="lbl lbl-d">Why This Role</div>
+  <h2 class="h2">Why Blossom.</h2>
+  <div class="bar"></div>
+  <div class="g2">
+    <div class="wc"><div class="ico">🏗️</div><h3>I Have Done This Before</h3><p>At STS Technical Services I walked in as the first and only recruiter for a $2B global company and built every system from scratch. Reduced time-to-fill by 20% in 4 months. Client extended a 2-month engagement to over a year. Building is my origin story.</p></div>
+    <div class="wc"><div class="ico">⚡</div><h3>High Velocity Is My Default</h3><p>I have managed 10 to 20 open requisitions across technical, product, engineering, and corporate functions simultaneously. I do not slow down under volume. I build systems that make high velocity sustainable.</p></div>
+    <div class="wc"><div class="ico">🧠</div><h3>Technical and Corporate Range</h3><p>Software Engineers, Data Scientists, Product Managers, AI and ML specialists at Motorola Solutions alongside GTM, Marketing, Finance, and Operations. The full range Blossom will need to hire across is exactly where I operate.</p></div>
+    <div class="wc"><div class="ico">🤝</div><h3>I Report to Founders Well</h3><p>I identify the problem, build the solution, and report back with results. At STS I had no playbook. At Uniti I rebuilt the entire onboarding process without being asked. High trust and autonomy is exactly how I thrive.</p></div>
+  </div>
+  <div class="pg pg-l">03 / 06</div>
+</section>
+
+<section class="s s-white" id="s3">
+  <div class="lbl lbl-d">Track Record</div>
+  <h2 class="h2">What I Bring.</h2>
+  <div class="bar"></div>
+  <div class="bring">
+    <div class="mlist">
+      <div class="mi"><div class="mi-n">98%</div><div><strong>Hiring Manager Satisfaction</strong><span>Across 6 teams at Uniti, VP and Director level leaders who came back every single search</span></div></div>
+      <div class="mi"><div class="mi-n">20%</div><div><strong>Time-to-Fill Reduction</strong><span>At two separate organizations through structured intakes and data-driven process improvements</span></div></div>
+      <div class="mi"><div class="mi-n">99%</div><div><strong>Day 1 Readiness</strong><span>Built a cross-functional onboarding dashboard. Issues dropped from 50% to zero within two weeks.</span></div></div>
+      <div class="mi"><div class="mi-n">650+</div><div><strong>Reqs in One Month</strong><span>Sole owner of all req creation post-merger at Uniti while maintaining full data integrity</span></div></div>
+    </div>
+    <div class="slist">
+      <div class="si"><h4>The Deal Nobody Thought Would Close</h4><p>A 3-person Google SRE hire had stalled for months at Motorola. I originated a 4-year sign-on clawback structure and closed all three candidates. Packages up to $500K base plus $200K sign-on. 100% team retention.</p></div>
+      <div class="si"><h4>Built From Zero at STS</h4><p>First and only recruiter for a $2B global manufacturer. Built every system from scratch. Reduced time-to-fill by 20% in 4 months. Promoted to RPO Lead in 3 months. Client extended a 2-month contract to over a year.</p></div>
+      <div class="si"><h4>AmeriCorps City Year Milwaukee</h4><p>Before recruiting I was an AmeriCorps member showing up for students in under-resourced schools. I learned to build something from nothing, care about outcomes over titles, and show up for people who need it most.</p></div>
+    </div>
+  </div>
+  <div class="pg pg-l">04 / 06</div>
+</section>
+
+<section class="s s-cream" id="s4">
+  <div class="lbl lbl-d">My Plan</div>
+  <h2 class="h2">My First 90 Days.</h2>
+  <div class="bar"></div>
+  <div class="p3">
+    <div class="pc pc1">
+      <div class="pc-d" style="color:#888">Days 1 to 30</div>
+      <div class="pc-t">Learn</div>
+      <ul class="pl">
+        <li>Understand Blossom's culture before touching the market</li>
+        <li>Meet every hiring manager and the founder for intake first</li>
+        <li>Audit what exists and what needs to be built from scratch</li>
+        <li>Learn the nuance between clinical and corporate hiring here</li>
+        <li>Listen more than I talk in every meeting</li>
+      </ul>
+    </div>
+    <div class="pc pc2">
+      <div class="pc-d">Days 31 to 60</div>
+      <div class="pc-t">Build</div>
+      <ul class="pl">
+        <li>Design scalable recruiting systems and intake frameworks</li>
+        <li>Own full-cycle searches across technical and corporate reqs</li>
+        <li>Build proactive pipelines before roles become urgent</li>
+        <li>Report pipeline health and market data to founder weekly</li>
+        <li>Deliver a candidate experience worthy of the mission</li>
+      </ul>
+    </div>
+    <div class="pc pc3">
+      <div class="pc-d">Days 61 to 90</div>
+      <div class="pc-t">Deliver</div>
+      <ul class="pl">
+        <li>First hires closed across technical and corporate tracks</li>
+        <li>Recruiting infrastructure documented and scalable</li>
+        <li>One process improvement shipped from observation</li>
+        <li>Follow up with every new hire at 1, 30, 60, and 90 days</li>
+        <li>Recognized as the recruiter Blossom was built to have</li>
+      </ul>
+    </div>
+  </div>
+  <div class="pg pg-l">05 / 06</div>
+</section>
+
+<section class="s s-dark closer" id="s5">
+  <div class="ci">
+    <div class="lbl lbl-g" style="text-align:center;">The Ask</div>
+    <h2 class="ch">I am not looking for<br><span>just any role.</span><br>I am looking for this one.</h2>
+    <div class="pills">
+      <span class="pill">AmeriCorps Alumni</span>
+      <span class="pill">Built From Zero</span>
+      <span class="pill">Technical and Corporate Range</span>
+      <span class="pill">Mission-Driven</span>
+      <span class="pill">Builder Mentality</span>
+    </div>
+    <div class="cbox">
+      <p>Someone once asked me why I am still in recruiting. I think about it like climate versus weather. Weather changes. Some searches are slow, some roles do not close. But my climate is a genuine belief that connecting the right person to the right opportunity changes both of their lives.</p>
+      <p>At Blossom, that climate matters even more. Every clinician you hire will sit across from someone struggling with their mental health and help them unlock a better version of themselves. I want to be the person who finds that clinician, and builds the system that finds them at scale. I am ready to do that work, starting day one, in New York.</p>
+    </div>
+    <div class="clinks">
+      <a href="mailto:moniquegstevens@gmail.com" class="cl"><span class="cl-i">email</span>moniquegstevens@gmail.com</a>
+      <a href="tel:2629607991" class="cl"><span class="cl-i">call</span>262-960-7991</a>
+      <a href="https://linkedin.com/in/moniquegstevens" target="_blank" class="cl"><span class="cl-i">in</span>linkedin.com/in/moniquegstevens</a>
+      <a href="https://moniquegstevens.github.io" target="_blank" class="cl"><span class="cl-i">web</span>moniquegstevens.github.io</a>
+    </div>
+    <div class="fin">"I am a builder by instinct and a systems thinker by practice."</div>
+  </div>
+  <div class="pg pg-d">06 / 06</div>
+</section>
+
+<script>
+const ss=document.querySelectorAll(".s");
+const ds=document.querySelectorAll(".dot");
+function go(i){ss[i].scrollIntoView({behavior:"smooth"});}
+const ob=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){const i=Array.from(ss).indexOf(e.target);ds.forEach(d=>d.classList.remove("on"));if(ds[i])ds[i].classList.add("on");}});},{threshold:0.4});
+ss.forEach(s=>ob.observe(s));
+</script>
+</body>
+</html>
