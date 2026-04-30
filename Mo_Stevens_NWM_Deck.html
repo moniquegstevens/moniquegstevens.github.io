@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mo Stevens — Northwestern Mutual Milwaukee</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #0a1628;
+    --navy-mid: #152340;
+    --gold: #c8a96e;
+    --gold-light: #e8cfa0;
+    --cream: #f8f4ee;
+    --white: #ffffff;
+    --text-muted: #8a9ab5;
+    --text-body: #d4dce8;
+    --serif: 'Playfair Display', Georgia, serif;
+    --sans: 'DM Sans', system-ui, sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--navy);
+    color: var(--white);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 3rem;
+    background: rgba(10, 22, 40, 0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 0.5px solid rgba(200, 169, 110, 0.2);
+  }
+
+  .nav-name {
+    font-family: var(--serif);
+    font-size: 1rem;
+    color: var(--gold);
+    letter-spacing: 0.04em;
+  }
+
+  .nav-dots {
+    display: flex;
+    gap: 8px;
+  }
+
+  .nav-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: rgba(200,169,110,0.3);
+    cursor: pointer;
+    transition: background 0.3s;
+    border: none;
+  }
+
+  .nav-dot.active { background: var(--gold); }
+
+  /* SLIDES */
+  .slide {
+    min-height: 100vh;
+    padding: 7rem 3rem 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    border-bottom: 0.5px solid rgba(200,169,110,0.1);
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .slide.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .slide-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .slide-number {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    font-weight: 500;
+  }
+
+  /* HERO */
+  .hero { background: var(--navy); }
+
+  .hero-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+  }
+
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    font-weight: 400;
+    line-height: 1.05;
+    color: var(--white);
+    margin-bottom: 1.5rem;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .hero-sub {
+    font-size: 1.1rem;
+    color: var(--text-body);
+    font-weight: 300;
+    max-width: 520px;
+    margin-bottom: 3rem;
+    line-height: 1.7;
+  }
+
+  .metrics-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: rgba(200,169,110,0.15);
+    border: 0.5px solid rgba(200,169,110,0.15);
+    margin-top: 1rem;
+  }
+
+  .metric {
+    background: var(--navy);
+    padding: 1.5rem 1.25rem;
+    text-align: center;
+  }
+
+  .metric-val {
+    font-family: var(--serif);
+    font-size: 2rem;
+    color: var(--gold);
+    display: block;
+    font-weight: 700;
+  }
+
+  .metric-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 4px;
+    display: block;
+  }
+
+  /* SECTION HEADINGS */
+  .slide h2 {
+    font-family: var(--serif);
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 400;
+    color: var(--white);
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+  }
+
+  .slide h2 em { font-style: italic; color: var(--gold); }
+
+  .slide-intro {
+    font-size: 1rem;
+    color: var(--text-muted);
+    margin-bottom: 2.5rem;
+    font-weight: 300;
+  }
+
+  /* CARDS */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1px;
+    background: rgba(200,169,110,0.1);
+  }
+
+  .card {
+    background: var(--navy-mid);
+    padding: 1.75rem 1.5rem;
+  }
+
+  .card-icon {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .card h3 {
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.75rem;
+  }
+
+  .card p {
+    font-size: 0.9rem;
+    color: var(--text-body);
+    font-weight: 300;
+    line-height: 1.65;
+  }
+
+  /* STORY BLOCKS */
+  .story-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: rgba(200,169,110,0.1);
+    margin-bottom: 1px;
+  }
+
+  .story {
+    background: var(--navy-mid);
+    padding: 1.75rem 1.5rem;
+  }
+
+  .story-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+
+  .story h3 {
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: var(--white);
+    margin-bottom: 0.75rem;
+  }
+
+  .story p {
+    font-size: 0.88rem;
+    color: var(--text-body);
+    font-weight: 300;
+    line-height: 1.65;
+  }
+
+  /* PLAN */
+  .plan-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(200,169,110,0.1);
+  }
+
+  .plan-col {
+    background: var(--navy-mid);
+    padding: 1.75rem 1.5rem;
+  }
+
+  .plan-col h3 {
+    font-size: 0.85rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 500;
+    margin-bottom: 1.25rem;
+  }
+
+  .plan-col ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .plan-col li {
+    font-size: 0.88rem;
+    color: var(--text-body);
+    font-weight: 300;
+    line-height: 1.65;
+    padding: 0.4rem 0;
+    border-bottom: 0.5px solid rgba(200,169,110,0.08);
+  }
+
+  .plan-col li:last-child { border-bottom: none; }
+
+  .plan-col li::before {
+    content: "— ";
+    color: var(--gold);
+    font-size: 0.8rem;
+  }
+
+  /* SOURCING */
+  .source-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: rgba(200,169,110,0.1);
+  }
+
+  .source-block {
+    background: var(--navy-mid);
+    padding: 1.75rem 1.5rem;
+  }
+
+  .source-block h3 {
+    font-size: 0.85rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+
+  .source-block ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .source-block li {
+    font-size: 0.88rem;
+    color: var(--text-body);
+    font-weight: 300;
+    padding: 0.35rem 0;
+    border-bottom: 0.5px solid rgba(200,169,110,0.08);
+    line-height: 1.5;
+  }
+
+  .source-block li:last-child { border-bottom: none; }
+
+  .goal-bar {
+    background: var(--navy-mid);
+    border: 0.5px solid rgba(200,169,110,0.2);
+    padding: 1.5rem;
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .goal-stat {
+    text-align: center;
+  }
+
+  .goal-stat span {
+    font-family: var(--serif);
+    font-size: 2.2rem;
+    color: var(--gold);
+    display: block;
+  }
+
+  .goal-stat p {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 2px;
+  }
+
+  .goal-divider {
+    width: 0.5px;
+    height: 50px;
+    background: rgba(200,169,110,0.2);
+  }
+
+  .goal-text {
+    flex: 1;
+    font-size: 0.9rem;
+    color: var(--text-body);
+    font-weight: 300;
+    line-height: 1.65;
+    min-width: 200px;
+  }
+
+  /* CLOSING */
+  .closing {
+    background: var(--navy);
+    text-align: center;
+  }
+
+  .closing .slide-inner { text-align: center; }
+
+  .closing h2 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    margin-bottom: 1.5rem;
+  }
+
+  .closing-body {
+    font-size: 1rem;
+    color: var(--text-body);
+    font-weight: 300;
+    max-width: 580px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.8;
+  }
+
+  .quote-block {
+    border-top: 0.5px solid rgba(200,169,110,0.25);
+    border-bottom: 0.5px solid rgba(200,169,110,0.25);
+    padding: 1.5rem 0;
+    margin: 2rem auto;
+    max-width: 560px;
+  }
+
+  .quote-block p {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--gold-light);
+    line-height: 1.6;
+  }
+
+  .contact-row {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+  }
+
+  .contact-item {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+  }
+
+  .contact-item a {
+    color: var(--gold);
+    text-decoration: none;
+  }
+
+  .contact-item a:hover { color: var(--gold-light); }
+
+  /* DIVIDER LINE */
+  .gold-line {
+    width: 48px;
+    height: 1px;
+    background: var(--gold);
+    margin: 1.5rem 0;
+  }
+
+  .closing .gold-line { margin: 1.5rem auto; }
+
+  @media (max-width: 640px) {
+    nav { padding: 1rem 1.25rem; }
+    .slide { padding: 6rem 1.25rem 3rem; }
+    .metrics-row { grid-template-columns: repeat(2, 1fr); }
+    .story-grid, .source-grid { grid-template-columns: 1fr; }
+    .plan-grid { grid-template-columns: 1fr; }
+    .nav-dots { display: none; }
+    .goal-bar { flex-direction: column; gap: 1rem; }
+    .goal-divider { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-name">Mo Stevens</span>
+  <div class="nav-dots" id="navDots"></div>
+</nav>
+
+<!-- SLIDE 1: HERO -->
+<section class="slide hero" data-slide="0">
+  <div class="slide-inner">
+    <p class="hero-eyebrow">Northwestern Mutual Milwaukee — Recruiter</p>
+    <h1>Monique<br><em>"Mo"</em> Stevens</h1>
+    <p class="hero-sub">Full-cycle recruiter rooted in Milwaukee. I find people who are not looking, build the trust to have the conversation, and close.</p>
+    <div class="metrics-row">
+      <div class="metric">
+        <span class="metric-val">98%</span>
+        <span class="metric-label">HM Satisfaction</span>
+      </div>
+      <div class="metric">
+        <span class="metric-val">90%+</span>
+        <span class="metric-label">Offer Acceptance</span>
+      </div>
+      <div class="metric">
+        <span class="metric-val">4+</span>
+        <span class="metric-label">Years Full-Cycle</span>
+      </div>
+      <div class="metric">
+        <span class="metric-val">MKE</span>
+        <span class="metric-label">Based and Ready</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 2: THE PROBLEM I AM SOLVING -->
+<section class="slide" data-slide="1">
+  <div class="slide-inner">
+    <p class="slide-number">01 — The Goal</p>
+    <h2>The Wauwatosa office needs <em>13 more advisors.</em></h2>
+    <div class="gold-line"></div>
+    <p class="slide-intro">7 of 20. That is a clearly defined problem with a clearly defined goal. Here is how I approach it.</p>
+
+    <div class="goal-bar">
+      <div class="goal-stat">
+        <span>20</span>
+        <p>Target advisors</p>
+      </div>
+      <div class="goal-divider"></div>
+      <div class="goal-stat">
+        <span>7</span>
+        <p>Currently on board</p>
+      </div>
+      <div class="goal-divider"></div>
+      <div class="goal-stat">
+        <span>20+</span>
+        <p>Interviews per month</p>
+      </div>
+      <div class="goal-divider"></div>
+      <div class="goal-text">
+        My metrics are interview-volume based. That means I build a consistent pipeline of qualified candidates, keep the funnel moving, and report what the data shows each week.
+      </div>
+    </div>
+
+    <div style="margin-top: 1px;">
+      <div class="card-grid">
+        <div class="card">
+          <span class="card-icon">🎯</span>
+          <h3>The Profile</h3>
+          <p>Self-starter, relationship-driven, financially stable enough for a ramp period. I have recruited this profile in sales and tech. I know what to look for and where to find it.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">🤝</span>
+          <h3>The Conversation</h3>
+          <p>Most advisor candidates are not actively looking. That means the first conversation is about trust, not pitch. I lead with the lifestyle and autonomy, not the product.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">📍</span>
+          <h3>The Market</h3>
+          <p>Milwaukee is not a new market for me. It is home. I know this community, and I know how to show up in it in a way that builds the NM brand organically.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 3: SOURCING STRATEGY -->
+<section class="slide" data-slide="2">
+  <div class="slide-inner">
+    <p class="slide-number">02 — Sourcing Strategy</p>
+    <h2>Where I find the <em>13.</em></h2>
+    <div class="gold-line"></div>
+    <p class="slide-intro">Advisor recruiting requires multi-channel sourcing. People are not searching for this career. You have to meet them where they already are.</p>
+
+    <div class="source-grid">
+      <div class="source-block">
+        <h3>Digital channels</h3>
+        <ul>
+          <li>LinkedIn Recruiter: passive outreach, boolean search, career change signals</li>
+          <li>Indeed and Handshake: active candidates and new grads open to financial careers</li>
+          <li>Facebook Groups: Milwaukee professional and community groups</li>
+          <li>Social media recruiting: NM brand promotion through organic content and events</li>
+        </ul>
+      </div>
+      <div class="source-block">
+        <h3>Community channels</h3>
+        <ul>
+          <li>Professional organizations: UWM alumni, SHRM Milwaukee, local business networks</li>
+          <li>Career events: campus recruiting, community job fairs, industry nights</li>
+          <li>Referral network: ask every advisor and leader who they would want to work with again</li>
+          <li>Community advocates: build relationships with people who know people</li>
+        </ul>
+      </div>
+      <div class="source-block">
+        <h3>Outreach approach</h3>
+        <ul>
+          <li>Personalized direct messages, not templates</li>
+          <li>Lead with the opportunity, not the company name</li>
+          <li>3-4 day follow up cadence, no candidate goes cold</li>
+          <li>Every touchpoint is consistent and clear on next steps</li>
+        </ul>
+      </div>
+      <div class="source-block">
+        <h3>Referral engine</h3>
+        <ul>
+          <li>Ask every advisor: who would you want on this team?</li>
+          <li>Referral candidates convert faster and stay longer</li>
+          <li>Build referral sources before roles become urgent</li>
+          <li>Track referral conversion separately to measure quality</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 4: HOW I WORK -->
+<section class="slide" data-slide="3">
+  <div class="slide-inner">
+    <p class="slide-number">03 — How I Work</p>
+    <h2>Sourcing and <em>keeping people in the process.</em></h2>
+    <div class="gold-line"></div>
+    <p class="slide-intro">Finding someone is the first step. Keeping them engaged through a career change conversation is the actual work.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <span class="card-icon">🔍</span>
+        <h3>Sourcing</h3>
+        <p>I build pipelines before roles become urgent. LinkedIn Recruiter, Indeed, Handshake, referrals, direct outreach, community events. I look for people who are not actively looking and start conversations that feel worth having.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">📩</span>
+        <h3>Touch Points</h3>
+        <p>I follow up with every candidate every 3 to 4 days throughout the process. No one wonders where they stand. Candidates who feel informed stay in the process. Candidates who go quiet usually do not come back.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🌐</span>
+        <h3>Referral Networks</h3>
+        <p>I ask every advisor and leader who they would want to work alongside. Referral candidates convert faster and stay longer. Building that network is an ongoing habit, not a one-time ask.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🤝</span>
+        <h3>Independent</h3>
+        <p>I manage my own pipeline, prioritize my own outreach, and flag issues before they become problems. I do not need a lot of hand-holding to stay productive. I know what the goal is and I work toward it.</p>
+      </div>
+    </div>
+
+    <div style="margin-top: 1px;">
+      <div class="story" style="background: var(--navy-mid); padding: 1.75rem 1.5rem;">
+        <p class="story-label">From STS Technical Services</p>
+        <h3 style="font-family: var(--serif); font-size: 1.1rem; font-weight: 400; color: var(--white); margin-bottom: 0.75rem;">Built a recruiting function from nothing</h3>
+        <p style="font-size: 0.88rem; color: var(--text-body); font-weight: 300; line-height: 1.65;">I was the only recruiter supporting a 5,000-person company with no existing process, no referral network, and no pipeline. I built every sourcing strategy from scratch across distributed U.S. teams. Within four months time-to-fill dropped 20%. The client extended a two-month engagement to over a year. I did not need someone checking in on me to make that happen.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 5: 90 DAY PLAN -->
+<section class="slide" data-slide="4">
+  <div class="slide-inner">
+    <p class="slide-number">04 — First 90 Days</p>
+    <h2>How I <em>get to work.</em></h2>
+    <div class="gold-line"></div>
+    <p class="slide-intro">Clear priorities. No wasted ramp time.</p>
+
+    <div class="plan-grid">
+      <div class="plan-col">
+        <h3>Days 1 to 30 — Learn</h3>
+        <ul>
+          <li>Understand what a strong advisor candidate looks like in this office specifically</li>
+          <li>Map the existing referral network and community relationships already in place</li>
+          <li>Learn the tools, screening process, and how the office likes to operate</li>
+          <li>Listen more than I talk</li>
+        </ul>
+      </div>
+      <div class="plan-col">
+        <h3>Days 31 to 60 — Build</h3>
+        <ul>
+          <li>Own the full candidate relationship from first outreach through each stage</li>
+          <li>Establish a consistent touch point cadence so no candidate goes quiet</li>
+          <li>Start building referral sources within the office and the broader Milwaukee community</li>
+          <li>Show up at community events and organizations to build the NM presence</li>
+        </ul>
+      </div>
+      <div class="plan-col">
+        <h3>Days 61 to 90 — Deliver</h3>
+        <ul>
+          <li>Pipeline producing 20+ qualified interviews per month consistently</li>
+          <li>Referral network generating warm leads on an ongoing basis</li>
+          <li>Candidates moving through the process without falling off</li>
+          <li>Minimal oversight needed to stay on track</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 6: CLOSING -->
+<section class="slide closing" data-slide="5">
+  <div class="slide-inner">
+    <p class="slide-number">05 — Why Mo</p>
+    <h2>Milwaukee is not just <em>where I work.</em></h2>
+    <div class="gold-line"></div>
+
+    <p class="closing-body">
+      I am a full-cycle recruiter who knows how to find people who are not looking and keep them engaged through a process that asks a lot of them. I manage my own pipeline, I stay on top of every candidate, and I do not need a lot of direction to stay productive.
+    </p>
+
+    <div class="quote-block">
+      <p>"We are the first smile they see and the last they remember. That is recruiting."</p>
+    </div>
+
+    <p class="closing-body" style="font-size: 0.9rem;">
+      Milwaukee is home. I am not learning this market, I am already in it. I would genuinely enjoy helping build something real here.
+    </p>
+
+    <div class="contact-row">
+      <span class="contact-item"><a href="mailto:moniquegstevens@gmail.com">moniquegstevens@gmail.com</a></span>
+      <span class="contact-item"><a href="tel:2629607991">262-960-7991</a></span>
+      <span class="contact-item"><a href="https://linkedin.com/in/moniquegstevens">linkedin.com/in/moniquegstevens</a></span>
+      <span class="contact-item"><a href="https://moniquegstevens.github.io">moniquegstevens.github.io</a></span>
+    </div>
+  </div>
+</section>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const dotsContainer = document.getElementById('navDots');
+
+  slides.forEach((_, i) => {
+    const dot = document.createElement('button');
+    dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+    dot.addEventListener('click', () => {
+      slides[i].scrollIntoView({ behavior: 'smooth' });
+    });
+    dotsContainer.appendChild(dot);
+  });
+
+  const dots = document.querySelectorAll('.nav-dot');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        const idx = parseInt(entry.target.dataset.slide);
+        dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+      }
+    });
+  }, { threshold: 0.15 });
+
+  slides.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
