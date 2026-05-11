@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mo Stevens — Experis</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  :root{
+    --e-navy:#0D1B2A;--e-dark:#071016;--e-blue:#1A6B8A;
+    --e-teal:#02C39A;--e-light:#F0F7FA;--e-white:#FFFFFF;
+    --e-text:#0D1B2A;--e-gray:#6B7280;
+    --fd:'Playfair Display',serif;--fb:'DM Sans',sans-serif;
+  }
+  html{scroll-behavior:smooth;}
+  body{font-family:var(--fb);background:var(--e-white);color:var(--e-text);overflow-x:hidden;}
+  .nav-dots{position:fixed;right:28px;top:50%;transform:translateY(-50%);z-index:100;display:flex;flex-direction:column;gap:12px;}
+  .nav-dot{width:8px;height:8px;border-radius:50%;background:rgba(13,27,42,0.25);cursor:pointer;transition:all 0.3s;border:none;}
+  .nav-dot.active,.nav-dot:hover{background:var(--e-teal);transform:scale(1.5);}
+  .slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:60px 80px;position:relative;overflow:hidden;}
+
+  /* HERO */
+  .slide-hero{background:linear-gradient(160deg,var(--e-dark) 0%,var(--e-navy) 55%,#0D3347 100%);color:white;}
+  .slide-hero::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(2,195,154,0.07) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;}
+  .hero-tag{display:inline-block;background:rgba(2,195,154,0.15);border:1px solid rgba(2,195,154,0.45);color:var(--e-teal);font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;padding:8px 18px;border-radius:100px;margin-bottom:32px;animation:fadeUp 0.8s ease both;}
+  .hero-name{font-family:var(--fd);font-size:clamp(48px,7vw,92px);font-weight:900;line-height:1;margin-bottom:16px;color:white;animation:fadeUp 0.8s 0.1s ease both;}
+  .hero-name span{color:var(--e-teal);}
+  .hero-title{font-size:clamp(15px,2vw,21px);font-weight:300;color:rgba(255,255,255,0.7);margin-bottom:48px;animation:fadeUp 0.8s 0.2s ease both;}
+  .hero-cta{display:flex;gap:20px;flex-wrap:wrap;animation:fadeUp 0.8s 0.3s ease both;}
+  .btn-teal{background:var(--e-teal);color:var(--e-dark);padding:14px 32px;border-radius:6px;font-weight:700;font-size:15px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:transform 0.2s,box-shadow 0.2s;}
+  .btn-teal:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(2,195,154,0.4);}
+  .btn-ghost{border:1px solid rgba(255,255,255,0.4);color:white;padding:14px 32px;border-radius:6px;font-weight:500;font-size:15px;text-decoration:none;transition:all 0.2s;}
+  .btn-ghost:hover{background:rgba(255,255,255,0.1);}
+  .hero-stats{position:absolute;right:80px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:20px;animation:fadeLeft 0.8s 0.4s ease both;}
+  .stat-card{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:14px;padding:22px 28px;text-align:center;min-width:150px;}
+  .stat-number{font-family:var(--fd);font-size:38px;font-weight:700;color:var(--e-teal);line-height:1;margin-bottom:6px;}
+  .stat-label{font-size:11px;font-weight:500;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:1.5px;}
+
+  /* SLIDES */
+  .slide-light{background:var(--e-white);}
+  .slide-off{background:var(--e-light);}
+  .slide-dark{background:var(--e-navy);color:white;}
+
+  .slide-label{font-size:11px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:var(--e-teal);margin-bottom:16px;opacity:0;animation:fadeUp 0.6s ease forwards;}
+  .slide-heading{font-family:var(--fd);font-size:clamp(32px,4.5vw,58px);font-weight:700;line-height:1.1;margin-bottom:40px;opacity:0;animation:fadeUp 0.6s 0.1s ease forwards;}
+  .slide-heading.light{color:white;}
+  .divider{width:50px;height:3px;background:linear-gradient(90deg,var(--e-blue),var(--e-teal));border-radius:2px;margin-bottom:28px;opacity:0;animation:fadeUp 0.6s 0.05s ease forwards;}
+  .slide-num{position:absolute;bottom:40px;left:80px;font-size:12px;color:rgba(13,27,42,0.3);letter-spacing:2px;}
+  .slide-num.light{color:rgba(255,255,255,0.3);}
+
+  /* WHY EXPERIS */
+  .stat-strip{display:flex;gap:28px;margin-bottom:40px;opacity:0;animation:fadeUp 0.6s 0.15s ease forwards;flex-wrap:wrap;}
+  .b-stat{display:flex;flex-direction:column;gap:4px;}
+  .b-stat strong{font-family:var(--fd);font-size:26px;font-weight:700;color:var(--e-blue);}
+  .b-stat span{font-size:11px;color:var(--e-gray);text-transform:uppercase;letter-spacing:1px;}
+  .why-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;opacity:0;animation:fadeUp 0.6s 0.2s ease forwards;}
+  .why-card{background:var(--e-white);border:1px solid #C8DDE6;border-radius:16px;padding:28px;position:relative;overflow:hidden;transition:transform 0.3s,box-shadow 0.3s;box-shadow:0 2px 8px rgba(13,27,42,0.06);}
+  .why-card:hover{transform:translateY(-3px);box-shadow:0 10px 32px rgba(13,27,42,0.12);}
+  .why-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--e-blue),var(--e-teal));}
+  .why-icon{font-size:28px;margin-bottom:14px;}
+  .why-card h3{font-family:var(--fd);font-size:19px;font-weight:700;margin-bottom:10px;color:var(--e-text);}
+  .why-card p{font-size:14px;line-height:1.7;color:var(--e-gray);}
+
+  /* WHAT I BRING */
+  .bring-layout{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start;opacity:0;animation:fadeUp 0.6s 0.2s ease forwards;}
+  .metric-list{display:flex;flex-direction:column;gap:14px;}
+  .metric-item{display:flex;align-items:flex-start;gap:18px;padding:16px 20px;background:var(--e-white);border-radius:12px;border:1px solid #C8DDE6;box-shadow:0 2px 6px rgba(13,27,42,0.05);transition:all 0.3s;}
+  .metric-item:hover{border-color:var(--e-blue);box-shadow:0 6px 20px rgba(13,27,42,0.1);}
+  .metric-num{font-family:var(--fd);font-size:26px;font-weight:700;color:var(--e-blue);min-width:68px;text-align:center;flex-shrink:0;}
+  .metric-text strong{display:block;font-size:13px;font-weight:600;margin-bottom:3px;color:var(--e-text);}
+  .metric-text span{font-size:12px;color:var(--e-gray);line-height:1.5;}
+  .story-block{display:flex;flex-direction:column;gap:16px;}
+  .story-item{padding:20px;border-radius:14px;border-left:3px solid var(--e-teal);background:var(--e-light);box-shadow:0 2px 6px rgba(13,27,42,0.05);}
+  .story-item h4{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--e-blue);margin-bottom:7px;}
+  .story-item p{font-size:13px;line-height:1.7;color:#444;}
+
+  /* MILWAUKEE */
+  .milw-content{max-width:780px;opacity:0;animation:fadeUp 0.6s 0.2s ease forwards;}
+  .milw-statement{font-family:var(--fd);font-size:clamp(20px,2.5vw,30px);font-weight:700;line-height:1.5;margin-bottom:36px;color:white;}
+  .milw-statement em{color:var(--e-teal);font-style:normal;}
+  .commitment-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:36px;}
+  .commitment-card{text-align:center;padding:24px 16px;background:rgba(255,255,255,0.07);border-radius:14px;border:1px solid rgba(255,255,255,0.13);}
+  .commitment-icon{font-size:32px;margin-bottom:10px;}
+  .commitment-card h4{font-size:14px;font-weight:700;margin-bottom:7px;color:white;}
+  .commitment-card p{font-size:12px;color:rgba(255,255,255,0.6);line-height:1.6;}
+  .milw-quote{background:rgba(2,195,154,0.12);border:1px solid rgba(2,195,154,0.3);border-radius:14px;padding:24px 28px;font-size:15px;line-height:1.8;color:rgba(255,255,255,0.9);font-style:italic;}
+
+  /* PLAN */
+  .plan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;opacity:0;animation:fadeUp 0.6s 0.2s ease forwards;}
+  .plan-card{border-radius:18px;padding:26px;}
+  .plan-card-1{background:var(--e-white);border:1px solid #C8DDE6;box-shadow:0 2px 6px rgba(13,27,42,0.06);}
+  .plan-card-2{background:var(--e-blue);color:white;}
+  .plan-card-3{background:var(--e-dark);color:white;}
+  .plan-day{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;opacity:0.55;margin-bottom:7px;}
+  .plan-title{font-family:var(--fd);font-size:24px;font-weight:700;margin-bottom:18px;}
+  .plan-items{list-style:none;display:flex;flex-direction:column;gap:9px;}
+  .plan-items li{display:flex;align-items:flex-start;gap:9px;font-size:12px;line-height:1.5;}
+  .plan-card-1 .plan-items li{color:#444;}
+  .plan-card-2 .plan-items li,.plan-card-3 .plan-items li{color:rgba(255,255,255,0.82);}
+  .plan-items li::before{content:'→';font-weight:700;flex-shrink:0;}
+  .plan-card-1 .plan-items li::before{color:var(--e-blue);}
+  .plan-card-2 .plan-items li::before,.plan-card-3 .plan-items li::before{color:var(--e-teal);}
+
+  /* CLOSE */
+  .slide-close{background:var(--e-dark);color:white;text-align:center;align-items:center;}
+  .slide-close::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(2,195,154,0.05) 1px,transparent 1px);background-size:44px 44px;pointer-events:none;}
+  .close-content{max-width:720px;opacity:0;animation:fadeUp 0.6s 0.1s ease forwards;}
+  .close-headline{font-family:var(--fd);font-size:clamp(28px,4vw,52px);font-weight:900;line-height:1.15;margin-bottom:24px;color:white;}
+  .close-headline span{color:var(--e-teal);}
+  .values-strip{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:32px;}
+  .value-pill{background:rgba(2,195,154,0.12);border:1px solid rgba(2,195,154,0.35);border-radius:100px;padding:7px 16px;font-size:12px;font-weight:600;color:var(--e-teal);}
+  .climate-block{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.13);border-radius:18px;padding:26px 30px;margin-bottom:32px;text-align:left;}
+  .climate-block p{font-size:14px;line-height:1.85;color:rgba(255,255,255,0.82);}
+  .climate-block p+p{margin-top:12px;}
+  .close-contact{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin-bottom:32px;}
+  .contact-item{display:flex;align-items:center;gap:9px;font-size:13px;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.2s;}
+  .contact-item:hover{color:var(--e-teal);}
+  .contact-icon{width:32px;height:32px;border-radius:7px;background:rgba(2,195,154,0.13);display:flex;align-items:center;justify-content:center;font-size:14px;}
+  .close-final{font-family:var(--fd);font-size:17px;font-weight:700;font-style:italic;color:rgba(255,255,255,0.28);}
+
+  @keyframes fadeUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
+  @keyframes fadeLeft{from{opacity:0;transform:translateX(28px);}to{opacity:1;transform:translateX(0);}}
+  @media(max-width:900px){.slide{padding:48px 32px;}.hero-stats{display:none;}.why-grid,.bring-layout,.commitment-grid,.plan-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<nav class="nav-dots">
+  <button class="nav-dot active" onclick="scrollToSlide(0)"></button>
+  <button class="nav-dot" onclick="scrollToSlide(1)"></button>
+  <button class="nav-dot" onclick="scrollToSlide(2)"></button>
+  <button class="nav-dot" onclick="scrollToSlide(3)"></button>
+  <button class="nav-dot" onclick="scrollToSlide(4)"></button>
+  <button class="nav-dot" onclick="scrollToSlide(5)"></button>
+</nav>
+
+<!-- SLIDE 1: HERO -->
+<section class="slide slide-hero" id="slide-0">
+  <div>
+    <div class="hero-tag">IT Recruiter — Experis Milwaukee</div>
+    <h1 class="hero-name">Monique<br><span>"Mo"</span> Stevens</h1>
+    <p class="hero-title">IT & Technical Recruiter &nbsp;·&nbsp; Agency & RPO &nbsp;·&nbsp; Milwaukee, WI &nbsp;·&nbsp; Ready Day 1</p>
+    <div class="hero-cta">
+      <a href="mailto:moniquegstevens@gmail.com" class="btn-teal">📬 moniquegstevens@gmail.com</a>
+      <a href="https://linkedin.com/in/moniquegstevens" class="btn-ghost" target="_blank">LinkedIn ↗</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-card"><div class="stat-number">98%</div><div class="stat-label">HM Satisfaction</div></div>
+    <div class="stat-card"><div class="stat-number">90%+</div><div class="stat-label">Offer Acceptance</div></div>
+    <div class="stat-card"><div class="stat-number">4+</div><div class="stat-label">Years Full-Cycle</div></div>
+  </div>
+  <div class="slide-num light">01 / 06</div>
+</section>
+
+<!-- SLIDE 2: WHY EXPERIS -->
+<section class="slide slide-off" id="slide-1">
+  <div class="slide-label">Why This Role</div>
+  <h2 class="slide-heading">Why Experis.</h2>
+  <div class="divider"></div>
+  <div class="stat-strip">
+    <div class="b-stat"><strong>70+ Years</strong><span>Doing Well by Doing Good</span></div>
+    <div class="b-stat"><strong>IT Specialist</strong><span>Experis Focus</span></div>
+    <div class="b-stat"><strong>Global HQ</strong><span>Downtown Milwaukee</span></div>
+    <div class="b-stat"><strong>Uncapped</strong><span>Commission</span></div>
+    <div class="b-stat"><strong>High Performing</strong><span>Milwaukee Team</span></div>
+  </div>
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="why-icon">💻</div>
+      <h3>IT Is My Lane</h3>
+      <p>Engineering, AI/ML, Cloud Infrastructure across AWS, GCP, and Azure, IT Program Management. I know the stack, I know what to listen for on a screen, and I know how to source candidates competitors are not finding.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">🔁</div>
+      <h3>Agency Is My Background</h3>
+      <p>STS was pure agency recruiting. I built the function from scratch, managed the full client relationship, and ran 300-400 outreach messages a day independently. The cadence Experis runs is one I have already lived.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">📍</div>
+      <h3>Full Circle Moment</h3>
+      <p>I tried to get into Manpower between Motorola and my current role. There were no IT-specialized openings at the time. When you reached out for an IT recruiter seat, it felt like the timing finally lined up.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">🌱</div>
+      <h3>Doing Well by Doing Good</h3>
+      <p>Experis and ManpowerGroup have spent more than 70 years proving that sustainable, meaningful employment has the power to change the world. That purpose is not a tagline to me. It is how I think about every placement I make.</p>
+    </div>
+  </div>
+  <div class="slide-num">02 / 06</div>
+</section>
+
+<!-- SLIDE 3: WHAT I BRING -->
+<section class="slide slide-light" id="slide-2">
+  <div class="slide-label">Track Record</div>
+  <h2 class="slide-heading">What I Bring.</h2>
+  <div class="divider"></div>
+  <div class="bring-layout">
+    <div class="metric-list">
+      <div class="metric-item">
+        <div class="metric-num">98%</div>
+        <div class="metric-text"><strong>Hiring Manager Satisfaction</strong><span>Sustained across 6 teams at Uniti including VP and Director-level leaders who requested me back on every search</span></div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-num">90%+</div>
+        <div class="metric-text"><strong>Offer Acceptance Rate</strong><span>Motorola Solutions, across Engineering, AI/ML, Cloud, and IT Program Management spanning the U.S., Canada, and Mexico</span></div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-num">20%</div>
+        <div class="metric-text"><strong>Time-to-Fill Reduction</strong><span>STS Technical Services, within 4 months of building the recruiting function from zero</span></div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-num">300-400</div>
+        <div class="metric-text"><strong>Outreach Messages Per Day</strong><span>STS — manual, personalized, no automation tools. Response rates held because the messages were written for the person, not blasted at a list.</span></div>
+      </div>
+    </div>
+    <div class="story-block">
+      <div class="story-item">
+        <h4>Agency DNA</h4>
+        <p>At STS I was the sole recruiter for a $2B global company. No inherited process, no CRM, no sequencing tools. I built screening workflows, interview frameworks, and pipeline documentation in 60 days and cut time-to-fill 20% in 4 months. The client bypassed the standard RPO rotation to request me personally on every project.</p>
+      </div>
+      <div class="story-item">
+        <h4>Relationship-First</h4>
+        <p>Candidates who were not selected at Motorola stayed in my network. The placement is not the end of the relationship. At Experis, where the goal is to engage talent for the long term, that is not just a nice quality. It is the job.</p>
+      </div>
+      <div class="story-item">
+        <h4>The Creative Close</h4>
+        <p>A 3-person Google SRE hire had been stalled for months on compensation. I originated a 4-year sign-on clawback structure nobody had tried. Closed all three offers. Full team retained.</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">03 / 06</div>
+</section>
+
+<!-- SLIDE 4: MILWAUKEE -->
+<section class="slide slide-dark" id="slide-3">
+  <div class="slide-label" style="color:var(--e-teal)">Milwaukee</div>
+  <div class="milw-content">
+    <h2 class="slide-heading light">Why Milwaukee<br>Is an Advantage.</h2>
+    <div class="divider"></div>
+    <p class="milw-statement">
+      I am not relocating to Milwaukee for this role.<br>
+      <em>I already live here. I know this market. I am ready Day 1.</em>
+    </p>
+    <div class="commitment-grid">
+      <div class="commitment-card">
+        <div class="commitment-icon">🎓</div>
+        <h4>UW-Milwaukee Alumna</h4>
+        <p>BBA in Human Resources Management, 2021. Deep roots in the Milwaukee professional community and alumni network.</p>
+      </div>
+      <div class="commitment-card">
+        <div class="commitment-icon">🏙️</div>
+        <h4>Local Market Knowledge</h4>
+        <p>I know Milwaukee's IT talent landscape, compensation benchmarks, and the culture of this city's tech community from years of recruiting here.</p>
+      </div>
+      <div class="commitment-card">
+        <div class="commitment-icon">🏢</div>
+        <h4>Global HQ Next Door</h4>
+        <p>I worked at Motorola directly across the river from your building for over a year. Being at the Manpower global headquarters feels like a natural next chapter.</p>
+      </div>
+    </div>
+    <div class="milw-quote">
+      "Experis is driven by the belief that sustainable, meaningful employment has the power to change the world. I want to be part of the team that proves that every single day."
+    </div>
+  </div>
+  <div class="slide-num light">04 / 06</div>
+</section>
+
+<!-- SLIDE 5: 90 DAYS -->
+<section class="slide slide-off" id="slide-4">
+  <div class="slide-label">My Plan</div>
+  <h2 class="slide-heading">My First 90 Days.</h2>
+  <div class="divider"></div>
+  <div class="plan-grid">
+    <div class="plan-card plan-card-1">
+      <div class="plan-day" style="color:#888">Days 1 to 30</div>
+      <div class="plan-title" style="color:var(--e-text)">Learn</div>
+      <ul class="plan-items">
+        <li>Understand Missy's team structure, existing client relationships, and what winning looks like here</li>
+        <li>Get inside the ATS and CRM from Day 1 and map the current pipeline structure</li>
+        <li>Shadow existing recruiters on active searches before running one independently</li>
+        <li>Learn the IT functions most in demand right now for Milwaukee clients</li>
+        <li>Listen more than I talk in every client call, every intake, every conversation</li>
+      </ul>
+    </div>
+    <div class="plan-card plan-card-2">
+      <div class="plan-day">Days 31 to 60</div>
+      <div class="plan-title">Contribute</div>
+      <ul class="plan-items">
+        <li>Own full-cycle searches independently for assigned IT reqs</li>
+        <li>Build passive pipelines for hard-to-fill roles before they become urgent</li>
+        <li>Run outreach cadences that are personalized, not blasted</li>
+        <li>Report weekly on pipeline health, outreach response rates, and candidate stage movement</li>
+        <li>Deliver a candidate experience that makes people want to stay in our network</li>
+      </ul>
+    </div>
+    <div class="plan-card plan-card-3">
+      <div class="plan-day">Days 61 to 90</div>
+      <div class="plan-title">Deliver</div>
+      <ul class="plan-items">
+        <li>First placements closed with quality and speed both tracked and shared with Missy</li>
+        <li>Client satisfaction documented after first placements</li>
+        <li>One process or outreach improvement proposed based on what I have observed</li>
+        <li>Candidate relationships built that extend beyond the immediate search</li>
+        <li>Positioned as the recruiter clients ask for by name</li>
+      </ul>
+    </div>
+  </div>
+  <div class="slide-num">05 / 06</div>
+</section>
+
+<!-- SLIDE 6: CLOSE -->
+<section class="slide slide-close" id="slide-5">
+  <div class="close-content">
+    <div class="slide-label" style="text-align:center;color:var(--e-teal)">The Ask</div>
+    <h2 class="close-headline">
+      I am not just placing people.<br>
+      <span>I am building relationships<br>that outlast the placement.</span>
+    </h2>
+    <div class="values-strip">
+      <span class="value-pill">IT Depth</span>
+      <span class="value-pill">Agency DNA</span>
+      <span class="value-pill">Milwaukee Local</span>
+      <span class="value-pill">Doing Well by Doing Good</span>
+    </div>
+    <div class="climate-block">
+      <p>Years ago I worked as a host at a restaurant. My manager pulled me aside and said: "You are the first person every guest interacts with. In their eyes, you are the restaurant. Make it count." I have carried that into every recruiting role since.</p>
+      <p>As a recruiter I am often the first human interaction a candidate has with a company. At Experis, where the goal is sustainable, meaningful employment and long-term talent relationships, that responsibility matters even more. My superpower is being the bridge. I absorb confusion and produce clarity on both sides of the conversation.</p>
+    </div>
+    <div class="close-contact">
+      <a href="mailto:moniquegstevens@gmail.com" class="contact-item"><span class="contact-icon">📬</span>moniquegstevens@gmail.com</a>
+      <a href="tel:2629607991" class="contact-item"><span class="contact-icon">📞</span>262-960-7991</a>
+      <a href="https://linkedin.com/in/moniquegstevens" target="_blank" class="contact-item"><span class="contact-icon">💼</span>linkedin.com/in/moniquegstevens</a>
+      <a href="https://moniquegstevens.github.io" target="_blank" class="contact-item"><span class="contact-icon">🌐</span>moniquegstevens.github.io</a>
+    </div>
+    <div class="close-final">"My superpower is being the bridge."</div>
+  </div>
+  <div class="slide-num light">06 / 06</div>
+</section>
+
+<script>
+  const slides=document.querySelectorAll('.slide');
+  const dots=document.querySelectorAll('.nav-dot');
+  function scrollToSlide(i){slides[i].scrollIntoView({behavior:'smooth'});}
+  const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){const i=Array.from(slides).indexOf(e.target);dots.forEach(d=>d.classList.remove('active'));if(dots[i])dots[i].classList.add('active');}});},{threshold:0.4});
+  slides.forEach(s=>obs.observe(s));
+</script>
+</body>
+</html>
