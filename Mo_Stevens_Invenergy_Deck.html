@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mo Stevens — Invenergy</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  :root{
+    --i-dark:#0A1F0F;--i-navy:#0D2B14;--i-green:#1B6B35;
+    --i-lime:#4CAF50;--i-light:#F0F7F1;--i-white:#FFFFFF;
+    --i-text:#0A1F0F;--i-gray:#6B7280;
+    --fd:'Playfair Display',serif;--fb:'DM Sans',sans-serif;
+  }
+  html{scroll-behavior:smooth;}
+  body{font-family:var(--fb);background:var(--i-white);color:var(--i-text);overflow-x:hidden;}
+  .nav-dots{position:fixed;right:28px;top:50%;transform:translateY(-50%);z-index:100;display:flex;flex-direction:column;gap:12px;}
+  .nav-dot{width:8px;height:8px;border-radius:50%;background:rgba(10,31,15,0.25);cursor:pointer;transition:all 0.3s;border:none;}
+  .nav-dot.active,.nav-dot:hover{background:var(--i-lime);transform:scale(1.5);}
+  .slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:60px 80px;position:relative;overflow:hidden;}
+
+  /* HERO */
+  .slide-hero{background:linear-gradient(160deg,var(--i-dark) 0%,var(--i-navy) 55%,#0F3B1C 100%);color:white;}
+  .slide-hero::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(76,175,80,0.07) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;}
+  .hero-tag{display:inline-block;background:rgba(76,175,80,0.15);border:1px solid rgba(76,175,80,0.45);color:var(--i-lime);font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;padding:8px 18px;border-radius:100px;margin-bottom:32px;animation:fadeUp 0.8s ease both;}
+  .hero-name{font-family:var(--fd);font-size:clamp(48px,7vw,92px);font-weight:900;line-height:1;margin-bottom:16px;color:white;animation:fadeUp 0.8s 0.1s ease both;}
+  .hero-name span{color:var(--i-lime);}
+  .hero-title{font-size:clamp(15px,2vw,21px);font-weight:300;color:rgba(255,255,255,0.7);margin-bottom:48px;animation:fadeUp 0.8s 0.2s ease both;}
+  .hero-cta{display:flex;gap:20px;flex-wrap:wrap;animation:fadeUp 0.8s 0.3s ease both;}
+  .btn-green{background:var(--i-lime);color:var(--i-dark);padding:14px 32px;border-radius:6px;font-weight:700;font-size:15px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:transform 0.2s,box-shadow 0.2s;}
+  .btn-green:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(76,175,80,0.4);}
+  .btn-ghost{border:1px solid rgba(255,255,255,0.4);color:white;padding:14px 32px;border-radius:6px;font-weight:500;font-size:15px;text-decoration:none;transition:all 0.2s;}
+  .btn-ghost:hover{background:rgba(255,255,255,0.1);}
+  .hero-stats{position:absolute;right:80px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:20px;animation:fadeLeft 0.8s 0.4s ease both;}
+  .stat-card{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:14px;padding:22px 28px;text-align:center;min-width:150px;}
+  .stat-number{font-family:var(--fd);font-size:38px;font-weight:700;color:var(--i-lime);line-height:1;margin-bottom:6px;}
+  .stat-label{font-size:11px;font-weight:500;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:1.5px;}
+
+  /* SLIDES */
+  .slide-light{background:var(--i-white);}
+  .slide-off{background:var(--i-light);}
+  .slide-dark{background:var(--i-navy);color:white;}
+
+  .slide-label{font-size:11px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:var(--i-lime);margin-bottom:16px;opacity:0;animation:fadeUp 0.6s ease forwards;}
+  .slide-heading{font-family:var(--fd);font-size:clamp(32px,4.5vw,58px);font-weight:700;line-height:1.1;margin-bottom:40px;opacity:0;animation:fadeUp 0.6s 0.1s ease forwards;}
+  .slide-heading.light{color:white;}
+  .divider{width:50px;height:3px;background:linear-gradient(90deg,var(--i-green),var(--i-lime));border-radius:2px;margin-bottom:28px;opacity:0;animation:fadeUp 0.6s 0.05s ease forwards;}
+  .slide-num{position:absolute;bottom:40px;left:80px;font-size:12px;color:rgba(10,31,15,0.3);letter-spacing:2px;}
+  .slide-num.light{color:rgba(255,255,255,0.3);}
+
+  /* WHY INVENERGY */
+  .stat-strip{display:flex;gap:28px;margin-bottom:40px;opacity:0;animation:fadeUp 0.6s 0.15s ease forwards;flex-wrap:wrap;}
+  .b-stat{display:flex;flex-direction:column;gap:4px;}
+  .b-stat strong{font-family:var(--fd);font-size:26px;font-weight:700;color:var(--i-green);}
+  .b-stat span{font-size:11px;color:var(--i-gray);text-transform:uppercase;letter-spacing:1px;}
+  .why-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;opacity:0;animation:fadeUp 0.6s 0.2s ease forwards;}
+  .why-card{background:var(--i-white);border:1px solid #C8DEC8;border-radius:16px;padding:28px;position:relative;overflow:hidden;transition:transform 0.3s,box-shadow 0.3s;box-shadow:0 2px 8px rgba(10,31,15,0.06);}
+  .why-card:hover{transform:translateY(-3px);box-shadow:0 10px 32px rgba(10,31,15,0.12);}
+  .why-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--i-green),var(--i-lime));}
+  .why-icon{font-size:28px;margin-bottom:14px;}
+  .why-card h3{font-family:var(--fd);font-size:19px;font-weight:700;margin-bottom:10px;color:var(--i-text);}
+  .why-card p{font-size:14px;line-height:1.7;color:var(--i-gray);}
+
+  /* WHAT I BRING */
+  .bring-layout{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start;opacity:0;animation:fadeUp 0.6s 0.2s ease forwards;}
+  .metric-list{display:flex;flex-direction:column;gap:14px;}
+  .metric-item{display:flex;align-items:flex-start;gap:18px;padding:16px 20px;background:var(--i-white);border-radius:12px;border:1px solid #C8DEC8;box-shadow:0 2px 6px rgba(10,31,15,0.05);transition:all 0.3s;}
+  .metric-item:hover{border-color:var(--i-green);box-shadow:0 6px 20px rgba(10,31,15,0.1);}
+  .metric-num{font-family:var(--fd);font-size:26px;font-weight:700;color:var(--i-green);min-width:68px;text-align:center;flex-shrink:0;}
+  .metric-text strong{display:block;font-size:13px;font-weight:600;margin-bottom:3px;color:var(--i-text);}
+  .metric-text span{font-size:12px;color:var(--i-gray);line-height:1.5;}
+  .story-block{display:flex;flex-direction:column;gap:16px;}
+  .story-item{padding:20px;border-radius:14px;border-left:3px solid var(--i-lime);background:var(--i-light);box-shadow:0 2px 6px rgba(10,31,15,0.05);}
+  .story-item h4{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--i-green);margin-bottom:7px;}
+  .story-item p{font-size:13px;line-height:1.7;color:#444;}
+
+  /* CHICAGO */
+  .chicago-content{max-width:780px;opacity:0;animation:fadeUp 0.6s 0.2s ease forwards;}
+  .chicago-statement{font-family:var(--fd);font-size:clamp(20px,2.5vw,30px);font-weight:700;line-height:1.5;margin-bottom:36px;color:white;}
+  .chicago-statement em{color:var(--i-lime);font-style:normal;}
+  .commitment-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:36px;}
+  .commitment-card{text-align:center;padding:24px 16px;background:rgba(255,255,255,0.07);border-radius:14px;border:1px solid rgba(255,255,255,0.13);}
+  .commitment-icon{font-size:32px;margin-bottom:10px;}
+  .commitment-card h4{font-size:14px;font-weight:700;margin-bottom:7px;color:white;}
+  .commitment-card p{font-size:12px;color:rgba(255,255,255,0.6);line-height:1.6;}
+  .chicago-quote{background:rgba(76,175,80,0.12);border:1px solid rgba(76,175,80,0.3);border-radius:14px;padding:24px 28px;font-size:15px;line-height:1.8;color:rgba(255,255,255,0.9);font-style:italic;}
+
+  /* PLAN */
+  .plan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;opacity:0;animation:fadeUp 0.6s 0.2s ease forwards;}
+  .plan-card{border-radius:18px;padding:26px;}
+  .plan-card-1{background:var(--i-white);border:1px solid #C8DEC8;box-shadow:0 2px 6px rgba(10,31,15,0.06);}
+  .plan-card-2{background:var(--i-green);color:white;}
+  .plan-card-3{background:var(--i-dark);color:white;}
+  .plan-day{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;opacity:0.55;margin-bottom:7px;}
+  .plan-title{font-family:var(--fd);font-size:24px;font-weight:700;margin-bottom:18px;}
+  .plan-items{list-style:none;display:flex;flex-direction:column;gap:9px;}
+  .plan-items li{display:flex;align-items:flex-start;gap:9px;font-size:12px;line-height:1.5;}
+  .plan-card-1 .plan-items li{color:#444;}
+  .plan-card-2 .plan-items li,.plan-card-3 .plan-items li{color:rgba(255,255,255,0.82);}
+  .plan-items li::before{content:'→';font-weight:700;flex-shrink:0;}
+  .plan-card-1 .plan-items li::before{color:var(--i-green);}
+  .plan-card-2 .plan-items li::before,.plan-card-3 .plan-items li::before{color:var(--i-lime);}
+
+  /* CLOSE */
+  .slide-close{background:var(--i-dark);color:white;text-align:center;align-items:center;}
+  .slide-close::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(76,175,80,0.05) 1px,transparent 1px);background-size:44px 44px;pointer-events:none;}
+  .close-content{max-width:720px;opacity:0;animation:fadeUp 0.6s 0.1s ease forwards;}
+  .close-headline{font-family:var(--fd);font-size:clamp(28px,4vw,52px);font-weight:900;line-height:1.15;margin-bottom:24px;color:white;}
+  .close-headline span{color:var(--i-lime);}
+  .values-strip{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:32px;}
+  .value-pill{background:rgba(76,175,80,0.12);border:1px solid rgba(76,175,80,0.35);border-radius:100px;padding:7px 16px;font-size:12px;font-weight:600;color:var(--i-lime);}
+  .climate-block{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.13);border-radius:18px;padding:26px 30px;margin-bottom:32px;text-align:left;}
+  .climate-block p{font-size:14px;line-height:1.85;color:rgba(255,255,255,0.82);}
+  .climate-block p+p{margin-top:12px;}
+  .close-contact{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin-bottom:32px;}
+  .contact-item{display:flex;align-items:center;gap:9px;font-size:13px;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.2s;}
+  .contact-item:hover{color:var(--i-lime);}
+  .contact-icon{width:32px;height:32px;border-radius:7px;background:rgba(76,175,80,0.13);display:flex;align-items:center;justify-content:center;font-size:14px;}
+  .close-final{font-family:var(--fd);font-size:17px;font-weight:700;font-style:italic;color:rgba(255,255,255,0.28);}
+
+  @keyframes fadeUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
+  @keyframes fadeLeft{from{opacity:0;transform:translateX(28px);}to{opacity:1;transform:translateX(0);}}
+  @media(max-width:900px){.slide{padding:48px 32px;}.hero-stats{display:none;}.why-grid,.bring-layout,.commitment-grid,.plan-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<nav class="nav-dots">
+  <button class="nav-dot active" onclick="scrollToSlide(0)"></button>
+  <button class="nav-dot" onclick="scrollToSlide(1)"></button>
+  <button class="nav-dot" onclick="scrollToSlide(2)"></button>
+  <button class="nav-dot" onclick="scrollToSlide(3)"></button>
+  <button class="nav-dot" onclick="scrollToSlide(4)"></button>
+  <button class="nav-dot" onclick="scrollToSlide(5)"></button>
+</nav>
+
+<!-- SLIDE 1: HERO -->
+<section class="slide slide-hero" id="slide-0">
+  <div>
+    <div class="hero-tag">Corporate Recruiter — Invenergy</div>
+    <h1 class="hero-name">Monique<br><span>"Mo"</span> Stevens</h1>
+    <p class="hero-title">Full-Cycle Corporate Recruiter &nbsp;·&nbsp; Consultative TA Partner &nbsp;·&nbsp; Relocating to Chicago, IL</p>
+    <div class="hero-cta">
+      <a href="mailto:moniquegstevens@gmail.com" class="btn-green">📬 moniquegstevens@gmail.com</a>
+      <a href="https://linkedin.com/in/moniquegstevens" class="btn-ghost" target="_blank">LinkedIn ↗</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-card"><div class="stat-number">98%</div><div class="stat-label">HM Satisfaction</div></div>
+    <div class="stat-card"><div class="stat-number">90%+</div><div class="stat-label">Offer Acceptance</div></div>
+    <div class="stat-card"><div class="stat-number">4+</div><div class="stat-label">Years Full-Cycle</div></div>
+  </div>
+  <div class="slide-num light">01 / 06</div>
+</section>
+
+<!-- SLIDE 2: WHY INVENERGY -->
+<section class="slide slide-off" id="slide-1">
+  <div class="slide-label">Why This Role</div>
+  <h2 class="slide-heading">Why Invenergy.</h2>
+  <div class="divider"></div>
+  <div class="stat-strip">
+    <div class="b-stat"><strong>25 Years</strong><span>Trusted Execution</span></div>
+    <div class="b-stat"><strong>Largest</strong><span>Private Developer in N. America</span></div>
+    <div class="b-stat"><strong>Chicago HQ</strong><span>Downtown</span></div>
+    <div class="b-stat"><strong>$74-95K</strong><span>Base + 15% Bonus</span></div>
+    <div class="b-stat"><strong>Workday</strong><span>ATS Match</span></div>
+  </div>
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="why-icon">⚡</div>
+      <h3>Powering What Matters</h3>
+      <p>Invenergy has spent 25 years developing reliable, affordable energy infrastructure across natural gas, solar, wind, and storage. That scale of mission-driven execution is exactly the kind of organization I want to help grow from the inside.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">🔧</div>
+      <h3>Workday Is My Stack</h3>
+      <p>I have managed the full recruiting lifecycle in Workday at Motorola Solutions and STS, covering req creation, candidate tracking, offer management, and pipeline reporting. No ramp-up needed on the ATS side.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">🤝</div>
+      <h3>Consultative by Nature</h3>
+      <p>I do not just fill reqs. I partner with hiring managers at every stage, share market intelligence throughout the search, and use data to shape decisions. My 98% HM satisfaction score at Uniti reflects that approach.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">📍</div>
+      <h3>Chicago Is the Move</h3>
+      <p>I am relocating to Chicago at the end of this month and looking to have a role lined up before I get there. On-site works.</p>
+    </div>
+  </div>
+  <div class="slide-num">02 / 06</div>
+</section>
+
+<!-- SLIDE 3: WHAT I BRING -->
+<section class="slide slide-light" id="slide-2">
+  <div class="slide-label">Track Record</div>
+  <h2 class="slide-heading">What I Bring.</h2>
+  <div class="divider"></div>
+  <div class="bring-layout">
+    <div class="metric-list">
+      <div class="metric-item">
+        <div class="metric-num">98%</div>
+        <div class="metric-text"><strong>Hiring Manager Satisfaction</strong><span>Sustained across 6 teams at Uniti Group including VP and Director-level leaders who requested me back on every search</span></div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-num">90%+</div>
+        <div class="metric-text"><strong>Offer Acceptance Rate</strong><span>Motorola Solutions, across Engineering, AI/ML, Cloud Infrastructure, and IT Program Management spanning the U.S., Canada, and Mexico</span></div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-num">20%</div>
+        <div class="metric-text"><strong>Time-to-Fill Reduction</strong><span>Achieved at both Motorola and STS through standardized intake frameworks, scorecard alignment, and proactive pipeline building</span></div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-num">20+</div>
+        <div class="metric-text"><strong>Reqs Managed Simultaneously</strong><span>Across all three roles, managing competing priorities with structured pipeline tracking and consistent stakeholder communication</span></div>
+      </div>
+    </div>
+    <div class="story-block">
+      <div class="story-item">
+        <h4>Workday in Practice</h4>
+        <p>Managed the full recruiting lifecycle in Workday at Motorola Solutions and STS, covering req creation, candidate tracking, offer management, and pipeline reporting across multiple concurrent searches. Not just familiar with Workday. It was my primary tool for over two years.</p>
+      </div>
+      <div class="story-item">
+        <h4>The Creative Close</h4>
+        <p>A 3-person Google SRE hire had been stalled for months on compensation. I originated a 4-year sign-on clawback structure nobody had tried. Closed all three offers. Full team retained.</p>
+      </div>
+      <div class="story-item">
+        <h4>Process Improvement</h4>
+        <p>At STS I built intake frameworks and standardized scorecards from zero in the first 60 days, cutting time-to-fill 20% in 4 months. At Uniti I standardized the intake call process across all reqs, significantly reducing mid-search scope changes and interview cancellations.</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">03 / 06</div>
+</section>
+
+<!-- SLIDE 4: CHICAGO -->
+<section class="slide slide-dark" id="slide-3">
+  <div class="slide-label" style="color:var(--i-lime)">Chicago</div>
+  <div class="chicago-content">
+    <h2 class="slide-heading light">Relocating<br>End of May.</h2>
+    <div class="divider"></div>
+    <p class="chicago-statement">
+      Moving to Chicago at the end of this month.<br>
+      <em>Looking to have a role ready before I get there. On-site works.</em>
+    </p>
+    <div class="commitment-grid">
+      <div class="commitment-card">
+        <div class="commitment-icon">🎓</div>
+        <h4>UW-Milwaukee Alumna</h4>
+        <p>BBA in Human Resources Management, 2021. Milwaukee has been home. Chicago is the next chapter.</p>
+      </div>
+      <div class="commitment-card">
+        <div class="commitment-icon">🏙️</div>
+        <h4>Chicago Market Familiar</h4>
+        <p>Recruited full-time roles at Motorola Solutions based in Chicago for over a year while commuting in. I know the compensation benchmarks and what candidates in this market respond to.</p>
+      </div>
+      <div class="commitment-card">
+        <div class="commitment-icon">🏢</div>
+        <h4>On-Site Ready</h4>
+        <p>Fully on-site in downtown Chicago works. I am relocating to be present and I am ready to show up from Day 1.</p>
+      </div>
+    </div>
+    <div class="chicago-quote">
+      "Invenergy has delivered reliable, affordable energy for 25 years through trusted execution. I want to be the recruiter who helps build the team that powers the next 25."
+    </div>
+  </div>
+  <div class="slide-num light">04 / 06</div>
+</section>
+
+<!-- SLIDE 5: 90 DAYS -->
+<section class="slide slide-off" id="slide-4">
+  <div class="slide-label">My Plan</div>
+  <h2 class="slide-heading">My First 90 Days.</h2>
+  <div class="divider"></div>
+  <div class="plan-grid">
+    <div class="plan-card plan-card-1">
+      <div class="plan-day" style="color:#888">Days 1 to 30</div>
+      <div class="plan-title" style="color:var(--i-text)">Learn</div>
+      <ul class="plan-items">
+        <li>Get inside Workday from Day 1 and map every active req and pipeline</li>
+        <li>Meet every hiring manager for assigned reqs before running a single search</li>
+        <li>Understand Invenergy's culture, growth priorities, and what great talent looks like here</li>
+        <li>Learn what has worked in past searches and where the gaps have been</li>
+        <li>Listen more than I talk in every intake, every meeting, every conversation</li>
+      </ul>
+    </div>
+    <div class="plan-card plan-card-2">
+      <div class="plan-day">Days 31 to 60</div>
+      <div class="plan-title">Contribute</div>
+      <ul class="plan-items">
+        <li>Own full-cycle searches independently for assigned corporate reqs</li>
+        <li>Run structured intake calls and share standardized scorecards with every hiring manager</li>
+        <li>Build passive pipelines for hard-to-fill roles before they become urgent</li>
+        <li>Proactively share market intel and pipeline updates with hiring managers throughout every search</li>
+        <li>Deliver a candidate experience that reflects Invenergy's reputation</li>
+      </ul>
+    </div>
+    <div class="plan-card plan-card-3">
+      <div class="plan-day">Days 61 to 90</div>
+      <div class="plan-title">Deliver</div>
+      <ul class="plan-items">
+        <li>First hires closed with quality and speed both tracked and reported</li>
+        <li>HM satisfaction documented after first placements</li>
+        <li>One process or sourcing improvement proposed based on what I have observed</li>
+        <li>Active participation in any TA initiatives or process improvement projects underway</li>
+        <li>Positioned as the recruiter hiring managers ask for by name</li>
+      </ul>
+    </div>
+  </div>
+  <div class="slide-num">05 / 06</div>
+</section>
+
+<!-- SLIDE 6: CLOSE -->
+<section class="slide slide-close" id="slide-5">
+  <div class="close-content">
+    <div class="slide-label" style="text-align:center;color:var(--i-lime)">The Ask</div>
+    <h2 class="close-headline">
+      I am not just filling reqs.<br>
+      <span>I am the first impression<br>your candidates have of Invenergy.</span>
+    </h2>
+    <div class="values-strip">
+      <span class="value-pill">Workday Native</span>
+      <span class="value-pill">Consultative Partner</span>
+      <span class="value-pill">Chicago Ready</span>
+      <span class="value-pill">Trusted Execution</span>
+    </div>
+    <div class="climate-block">
+      <p>Years ago I worked as a host at a restaurant. My manager pulled me aside and said: "You are the first person every guest interacts with. In their eyes, you are the restaurant. Make it count." I have carried that into every recruiting role since.</p>
+      <p>As a recruiter I am often the first human interaction a candidate has with a company. At Invenergy, a company built on 25 years of trusted execution, that responsibility matters even more. My superpower is being the bridge. I absorb confusion and produce clarity on both sides of the conversation.</p>
+    </div>
+    <div class="close-contact">
+      <a href="mailto:moniquegstevens@gmail.com" class="contact-item"><span class="contact-icon">📬</span>moniquegstevens@gmail.com</a>
+      <a href="tel:2629607991" class="contact-item"><span class="contact-icon">📞</span>262-960-7991</a>
+      <a href="https://linkedin.com/in/moniquegstevens" target="_blank" class="contact-item"><span class="contact-icon">💼</span>linkedin.com/in/moniquegstevens</a>
+      <a href="https://moniquegstevens.github.io" target="_blank" class="contact-item"><span class="contact-icon">🌐</span>moniquegstevens.github.io</a>
+    </div>
+    <div class="close-final">"My superpower is being the bridge."</div>
+  </div>
+  <div class="slide-num light">06 / 06</div>
+</section>
+
+<script>
+  const slides=document.querySelectorAll('.slide');
+  const dots=document.querySelectorAll('.nav-dot');
+  function scrollToSlide(i){slides[i].scrollIntoView({behavior:'smooth'});}
+  const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){const i=Array.from(slides).indexOf(e.target);dots.forEach(d=>d.classList.remove('active'));if(dots[i])dots[i].classList.add('active');}});},{threshold:0.4});
+  slides.forEach(s=>obs.observe(s));
+</script>
+</body>
+</html>
